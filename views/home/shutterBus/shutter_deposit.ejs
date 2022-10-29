@@ -1,0 +1,126 @@
+<%- include('./partial/header'); %>
+    <div class="bg-gray-100 mx-auto max-w-6xl bg-white py-20 px-12 lg:px-24 shadow-xl mb-24">
+ <section class="py-8 relative">
+     <a href="#" onclick=back() class="nav__link absolute left-0">
+    <i class="material-icons nav__icon">arrow_back</i>
+    <span class="nav__text font-body">Back</span>
+  </a>
+            <h3 class="text-center font-bold text-lg">Add Payment Info</h3>
+          </section>
+            <form id="btn">
+               <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
+             
+                <div class="-mx-3 md:flex mb-6">
+                    <div class="md:w-full px-3">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="application-link">
+                            Name Of Payee *
+                        </label>
+                        <input name="address"
+                            class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                            id="payee" type="text" placeholder="" required>
+                    </div>
+                    <div class="md:w-full px-3">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="application-link">
+                            Amount Paid *
+                        </label>
+                        <input name="address"
+                            class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                            id="amount" type="number" placeholder="" required>
+                    </div>
+                </div>
+                <div class="-mx-3 md:flex mb-6">
+                    <div class="md:w-full px-3">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="application-link">
+                            Teller No / Receipt No *
+                        </label>
+                        <input name="address"
+                            class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                            id="Receipt" type="text" placeholder="" required>
+                    </div>
+
+
+                    <div class="md:w-full px-3">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="application-link">
+                            Upload Image
+                        </label>
+                        <input name="image" id="image"
+                            class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                            type="file" placeholder="">
+                    </div>
+
+                </div>
+
+                <div class="-mx-3 md:flex mt-2">
+                    
+                    <button id="submit"  type="submit" onclick="load()" class="md:w-full bg-gray-900 text-white font-bold py-2 px-4  rounded  cursor-pointer ">
+                        <span class="text">
+                            Record Payment
+                        </span>
+                    </button>
+                </div>
+            </div>
+            </form>
+
+            <h4 id="matchlist" class="text-green font-bold py-2 px-4 border-b-4 ">
+
+            </h4>
+        </div>
+    </body>
+    <script>
+        function load() {
+            let btn = document.getElementById("submit")
+            let form=document.getElementById("btn")
+             let newPost = document.getElementById("matchlist")
+            form.addEventListener("submit",(e=>{
+                e.preventDefault()
+                btn.classList.add("loading")
+                 btn.disabled=true
+               
+        }))
+            let obj = {
+                payee: document.getElementById("payee"),
+                amount: document.getElementById("amount"),
+                image: document.getElementById("image"),
+                Receipt: document.getElementById("receipt"),
+
+
+            }
+            let formData = new FormData()
+           
+            formData.append("image", obj.image.files[0])
+            formData.append("payee", obj.payee.value)
+            formData.append("amount", obj.amount.value)
+            formData.append("receipt", obj.Receipt.value)
+            let xhr = new XMLHttpRequest()
+
+
+            xhr.onload = () => {
+
+                obj.image.value = "";
+                obj.image.value = "";
+                obj.payee.value = "";
+                obj.amount.value = "";
+                obj.Receipt.value = ""
+                btn.disabled=false
+                alert(xhr.responseText)
+                newPost.innerText = ` ${xhr.responseText}`
+                
+            }
+
+            xhr.open("post", "/shuttle/add/deposit", true);
+
+            xhr.send(
+                formData
+            )
+
+        
+    
+    }
+
+
+ function back() {
+               history.back(-1)
+            }
+    </script>
+
+</html>

@@ -1,0 +1,445 @@
+<%- include('./partial/header') %>
+<div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+         
+ <div class="search-wrapper">
+                <span onclick=search() class="las la-search">
+                 </span>
+                    <input type="text"  name="" placeholder="Search Resident" id="search_resident">
+                
+            </div>
+          
+           
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name"></h4>
+                <small id="user_role"> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+              <div class="breadcrumb">
+<span> Resident Management </span>
+<span id="current">All Resident</span>
+
+                    </div>
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+              
+                        <div class="card-header">
+                            <div>
+                                
+                                <button><a href="/resident/list/download">Export to Excel</a></button>
+                            </div>
+                        <h3>All Residents</h3>
+                        
+                   <div>
+  <span>Sort By Drive Number</span>
+                        <select id="selected" onchange=clicked()>
+                             <option selected disabled value="">
+                                Drive No
+                            </option>
+                            <option value="1">
+                                Drive 1
+                            </option>
+                            <option value="2">
+                                Drive 2
+                            </option>
+                             <option value="3">
+                                Drive 3
+                            </option>
+                             <option value="4">
+                                Drive 4
+                            </option>
+                             <option value="5">
+                                Drive 5
+                            </option>
+                             <option value="6">
+                                Drive 6
+                            </option>
+                        </select>
+                   </div>
+                      
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%" id="table_residet">
+                                <thead>
+                                    <tr>
+                                    <td>S/N</td>  
+                                     <td>
+                                       Pic
+                                        
+                                    </td>
+                                <td>
+                                        Name Of Resident
+                                        
+                                    </td>
+                                    <td>
+                                      UId
+                                      
+                                  </td>
+                                <td>
+                                        Telephone No
+                                        
+                                    </td>
+                               
+                                    <td>
+                                       House No
+                                        
+                                    </td>
+                                     <td>
+                                       Apartment Type
+                                        
+                                    </td>
+                                    <td>
+                                       Drive No
+                                        
+                                    </td>
+                                 <td>
+                                       Status
+                                        
+                                    </td>
+<% if (user.is_SuperAdmin || user.is_ResidentManager){%> 
+                                   <td>
+                                       Action
+                                        
+                                    </td>
+                                    <% } %></tr>
+                                </thead>
+                              <tbody id="table_resident">
+
+                              </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+
+  
+
+  </body>
+<script>
+  
+let residents_arr
+var currentFocus;
+function autocomplete(inp, arr) {
+ inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      this.parentNode.appendChild(a);
+      for (i = 0; i < arr.length; i++) {
+        if (arr[i].fullname.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          b = document.createElement("DIV");
+          b.innerHTML = "<strong>" + arr[i].fullname.substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].fullname.substr(val.length);
+          b.innerHTML += "<input type='hidden' value='" + arr[i].fullname + "'>";
+             b.addEventListener("click", function(e) {
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      
+      if (x) x = x.getElementsByTagName("div");
+      console.log(x)
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+  if (!x) return false;
+   removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+   x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+      x[i].parentNode.removeChild(x[i]);
+    }
+  }
+}
+}
+document.addEventListener("click", function (e) {
+    closeAllLists(e.target);
+});
+
+let input_search=document.getElementById("search_resident")
+input_search.addEventListener("input",()=>{
+ autocomplete(document.getElementById("search_resident"), residents_arr);
+})
+function search() {
+     let input_val=document.getElementById("search_resident") 
+     input_value=input_val.value
+     if(!input_value){
+return false
+     }
+          let table=document.getElementById("table_resident") 
+         let xhr = new XMLHttpRequest();
+          let requestObj="name="+input_value;
+          console.log(xhr.readyState);
+          xhr.onload = () => {
+            let count=0
+            let rowCount=table.rows.length         
+              let data=JSON.parse(xhr.responseText)
+                       for(let i=count;i<rowCount;i++){
+              table.deleteRow(count)
+                    }
+              add_data(data)
+
+         };
+        xhr.open("get", `/residents/search/${input_value}`, true);
+        xhr.send(requestObj);
+}
+function clicked() {   
+          let select=document.getElementById("selected") 
+          let table=document.getElementById("table_resident")
+          let val= select.value 
+         let xhr = new XMLHttpRequest();
+          let requestObj="driveNo="+val;
+          console.log(xhr.readyState);
+          xhr.onload = () => {
+            let count=0
+            let rowCount=table.rows.length         
+              let data=JSON.parse(xhr.responseText)
+                       for(let i=count;i<rowCount;i++){
+              table.deleteRow(count)
+                    }
+              add_data(data)
+
+         };
+        xhr.open("get", `/residents/${val}`, true);
+        xhr.send(requestObj);
+        }
+ load()
+function load() {
+    let xhr = new XMLHttpRequest();
+
+        xhr.onload = () => {
+      console.log(xhr.responseText)
+            let data=JSON.parse(xhr.responseText)
+            
+            add_data(data)
+            residents_arr=data.result
+            
+ };
+
+        xhr.open("get", `/admin/list/resident`, true);
+        xhr.send();
+      }
+      
+function add_data(data){
+  if(data.profile){
+let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+user_name.textContent=data.profile[0].fullname
+
+  }
+
+let table=document.getElementById("table_resident") 
+for (let i = 0; i < data.result.length; i++) {
+let tr=document.createElement("tr")
+if(data.result[i].status=="Active"){
+    if(data.result[i].image){
+ tr.innerHTML=
+ `<td>${i+1}</td>`+
+   `<td><img src="/upload/${data.result[i].image}" height="50" width="50" style="object-fit:cover;border-radius:50%;" alt="Avatar"></td>`+
+ `<td>`+data.result[i].fullname +`</td>`+
+ `<td>`+data.result[i].unique_id +`</td>`+
+ `<td>${data.result[i].telephone  }</td>`+
+  `<td>${data.result[i].houseNo} </td>`+
+ `<td>${data.result[i].houseType}</td>`+
+ `<td>${data.result[i].driveNo} </td>`+
+ `<td>`+
+  `<span style="display:flex">`+
+      `<span class="status green"></span>`+ data.result[i].status
+      +`</span>`
+  +` </td>`
+   +
+  `<td class="btn_resident">`
+   <% if (user.is_SuperAdmin){%> 
+      
+   
+    +` <button><a href="/admin/resident/delete/${data.result[i].tenId}"><span>
+             Delete
+               </span></a></button>`
+                 <% } %>
+               <% if (user.is_ResidentManager || user.is_SuperAdmin){%> +
+                                              
+              ` <button><a href="/admin/resident/update/${data.result[i].tenId}"><span>
+               Edit
+          </span></a></button>`+
+   ` </td>`
+      <% } %>
+    table.append(tr) 
+
+    }
+    else if(!data.result[i].image){
+        tr.innerHTML=
+       `<td>${i+1}</td>`+
+   `<td><img src="/img/avatar.svg" height="50" width="50" alt="Avatar"></td>`+
+ `<td>`+data.result[i].fullname +`</td>`+
+ `<td>`+data.result[i].unique_id +`</td>`+
+ `<td>${data.result[i].telephone  }</td>`+
+  `<td>${data.result[i].houseNo} </td>`+
+ `<td>${data.result[i].houseType}</td>`+
+ `<td>${data.result[i].driveNo} </td>`+
+ `<td>`+
+  `<span style="display:flex">`+
+      `<span class="status green"></span>`+ data.result[i].status
+      +`</span>`
+  +` </td>`
+    +
+  `<td class="btn_resident">`+
+   <% if (user.is_SuperAdmin){%> 
+  
+    ` <button><a href="/admin/resident/delete/${data.result[i].tenId}"><span>
+             Delete
+               </span></a></button>`+
+                 <% } %>
+                 
+                
+             <% if (user.is_ResidentManager || user.is_SuperAdmin){%>                                   
+              ` <button><a href="/admin/resident/update/${data.result[i].tenId}"><span>
+               Edit
+          </span></a></button>`+
+   ` </td>`
+      <% } %>
+    table.append(tr) 
+ 
+    }
+ 
+}
+else{
+   if(data.result[i].image){
+        tr.innerHTML=
+       `<td>${i+1}</td>`+
+    `<td><img src="/upload/${data.result[i].image}" height="50" width="50" style="object-fit:cover;border-radius:50%;" alt="Avatar"></td>`+
+ `<td>`+data.result[i].fullname +`</td>`+
+ `<td>`+data.result[i].unique_id +`</td>`+
+ `<td>${data.result[i].telephone  }</td>`+
+  `<td>${data.result[i].houseNo} </td>`+
+ `<td>${data.result[i].houseType}</td>`+
+ `<td>${data.result[i].driveNo} </td>`+
+ `<td>`+
+  `<span style="display:flex">`+
+     `<span class="status red"></span>`+ data.result[i].status
+  +`</span>`
+     +` </td>`
+         +
+  `<td class="btn_resident">`+
+   <% if (user.is_SuperAdmin){%> 
+
+    ` <button><a href="/admin/resident/delete/${data.result[i].tenId}"><span>
+             Delete
+               </span></a></button>`
+                 <% } %>
+                
+               <% if (user.is_ResidentManager || user.is_SuperAdmin){%>                              
+              ` <button><a href="/admin/resident/update/${data.result[i].tenId}"><span>
+               Edit
+          </span></a></button>`+
+   ` </td>`
+      <% } %>
+    table.append(tr) 
+ 
+    }
+
+else if(!data.result[i].image){
+  tr.innerHTML=
+       `<td>${i+1}</td>`+
+   `<td><img src="/img/avatar.svg" height="50" width="50" alt="Avatar"></td>`+
+ `<td>`+data.result[i].fullname +`</td>`+
+ `<td>`+data.result[i].unique_id +`</td>`+
+ `<td>${data.result[i].telephone  }</td>`+
+  `<td>${data.result[i].houseNo} </td>`+
+ `<td>${data.result[i].houseType}</td>`+
+ `<td>${data.result[i].driveNo} </td>`+
+ `<td>`+
+    `<span style="display:flex">`+
+     `<span class="status red"></span>`+ data.result[i].status
+  +`</span>`
+     +` </td>`
+       +
+  `<td class="btn_resident">`
+    <% if (user.is_SuperAdmin){%> 
+  
+    +
+    ` <button><a href="/admin/resident/delete/${data.result[i].tenId}"><span>
+             Delete
+               </span></a></button>`
+                <% } %>
+          <% if (user.is_ResidentManager || user.is_SuperAdmin){%>        
+                +
+                                              
+              ` <button><a href="/admin/resident/update/${data.result[i].tenId}"><span>
+               Edit
+          </span></a></button>`+
+   ` </td>`
+      <% } %>
+    table.append(tr) 
+}
+}
+ 
+ }
+  
+ }
+
+  
+</script>
+</html>

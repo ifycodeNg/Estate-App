@@ -1,0 +1,211 @@
+<%- include('./partial/header') %>
+
+<div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+         
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Super Admin</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span> Revenue Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Record A Payment</h3>
+                               
+                            </div>
+                        
+                        
+ 
+                  </div>
+                <form id="form">
+                    <div class="form-row">
+ <label for="">Operator Name</label>
+                   <input id="name" required type="text">
+                    </div>
+                  <div class="form-row">
+ <label for="">Telephone</label>
+                   <input id="telephone" required type="text">
+                    </div>
+                 <div class="form-row">
+ <label for="">Teller No</label>
+                   <input id="teller_no" required type="text">
+                    </div>     
+                 
+                     <div class="form-row">
+ <label for="">Amount Paid</label>
+                   <input id="amount" required type="number">
+                    </div>
+                    <div class="form-row">
+<label for="">Revenue Option</label>
+ <select required name="" id="option">
+      <option value="" selected disabled>
+                               Select Revenue Options
+                            </option>
+                         <option value="School Charges">
+                               School Charges
+                            </option>
+                            <option value="House Re-design / Restructuring">
+                                House Re-design / Restructuring
+                            </option>
+                             <option value="Car Stickers">
+                                Car Stickers
+                            </option>
+                            <option value="House Id Stickers">
+                                House Id Stickers
+                            </option>
+                            <option value="Domestic Staff Id">
+                                Domestic Staff Id
+                            </option>
+                             <option value="Renting Of Sporting Facility">
+                                Renting Of Sporting Facility
+                            </option>
+                                                         <option value="Billboards Advertising Levy">
+                                Billboards Advertising Levy
+                            </option>
+                                                         <option value="Big Trucks Access Road Levy">
+                                Big Trucks Access Road Levy
+                            </option>
+                                                         <option value="Telcos Mast / Base Station">
+                                Telcos Mast / Base Station
+                            </option>
+                            
+                                    <option value="Health Facility Charge">
+                                Health Facility Charge
+                            </option>
+                            
+                            </select>
+                    </div>
+                    
+                     <div class="form-row">
+ <label for="">Outstanding</label>
+                   <input id="outstanding" required type="text">
+                    </div>
+                    <div class="form-row">
+ <label for="">Receipt Issued</label>
+                 <input id="given"   type="checkbox">
+                    </div>
+                     <div class="form-row">
+ <label for="">Teller Image</label>
+                 <input accept="image/*" type="file" id="image"  >
+                    </div>
+                 
+                       <button id="btn" onclick="load()">
+                            <span id="text">Record Payment</span>
+                        </button>
+                   
+                </form>
+              </div>
+             
+          </div>
+           <div id="snackbar">
+
+           </div>
+        </main>
+        
+        
+    </div>
+   
+    </div>
+    <script>
+        window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+    function load() {
+        let form=document.getElementById("form")
+        let btn=document.getElementById("btn")
+        let text=document.getElementById("text")
+        let snackBar=document.getElementById("snackbar")
+       form.addEventListener("submit",(e)=>{
+          e.preventDefault()
+        btn.classList.add("loading")
+        btn.disabled=true
+         text.style.visibility="hidden"
+       })
+        let given=document.getElementById(`given`)
+        let val=given.checked
+        value=val?"true":"false"
+        let obj = {
+          name: document.getElementById("name"),
+           telephone: document.getElementById("telephone"),
+          outstanding: document.getElementById("outstanding"),
+          teller_no: document.getElementById("teller_no"),
+          amount: document.getElementById("amount"),
+          image: document.getElementById("image"),
+           option: document.getElementById("option")
+        }; 
+         let formData = new FormData()
+            formData.append("name",obj.name.value)
+            formData.append("image", obj.image.files[0])
+            formData.append("outstanding", obj.outstanding.value)
+            formData.append("given", value)
+            formData.append("amount", obj.amount.value)
+            formData.append("receipt", obj.teller_no.value)
+            formData.append("option", obj.option.value)
+            formData.append("telephone", obj.telephone.value)
+         let xhr = new XMLHttpRequest();
+          console.log(xhr.readyState);   
+          xhr.onload = () => {
+           
+                snackBar.innerText = ` ${xhr.responseText}`
+                btn.disabled=false
+                text.style.visibility="visible"
+                snackBar.className="show"
+                btn.classList.remove("loading")
+                setTimeout(()=>{
+                    snackBar.className=snackBar.className.replace("show","")
+
+                },3000)  
+          obj.option.value = "";
+          obj.name.value = "";
+          obj.teller_no.value = "";
+          obj.telephone.value = "";
+          given.checked=false
+          obj.image.value = "";
+          obj.amount.value = "";
+        obj.outstanding.value = "";
+        };
+
+        xhr.open("post", "/admin/make/payment", true);
+       
+        xhr.send(formData);
+       }
+    </script>
+      </body>
+      </html>

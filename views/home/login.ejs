@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <link rel="manifest" href="/css/manifest.json" />
+    <meta name="theme-color" content="green" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+
+  <body style="position: relative;">
+      
+         <% if (errors != ""){ %>
+<%errors.forEach((error)=>{%>
+  <div  class="alert-danger" style="width: 100%;
+    position: absolute;">
+    
+    <p><%- error %></p>  
+  </div>
+  
+<%})%>
+    <%  } %>
+
+  
+    <img class="wave" src="/image/login_img_medium.jpg" />
+    <div class="container">
+     
+   
+      <div class="img">
+
+      </div>
+      <div class="login-content">
+        <form action="/admin/verify" method="POST">
+         <div class="img_log"> <img src="/img/avatar.svg" /></div>
+          <h2 class="title">Welcome</h2>
+          <div class="input-div one">
+            <div class="i">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="div">
+              <h5>Username</h5>
+              <input required type="text" name="name" class="input" />
+            </div>
+          </div>
+          <div class="input-div pass">
+            <div class="i">
+              <i class="fas fa-lock"></i>
+            </div>
+            <div class="div">
+              <h5>Password</h5>
+              <input required name="password" type="password" class="input" />
+            </div>
+          </div>
+          <a href="/forget/password">Forgot Password ?</a>
+          <button class="btn"><span class="loginBtn">Login</span></button>
+        </form>
+      </div>
+    </div>
+    <script type="text/javascript" src="/js/main.js"></script>
+  </body>
+</html>

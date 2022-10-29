@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/tailwind.css" />
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+     <style>
+     .loading .text{
+     visibility: hidden;
+     opacity: 0;
+ }
+.loading::after{
+    content: "";
+   
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    
+     top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 5px solid transparent;
+    border-top-color:#fff ;
+    border-radius: 50%;
+    animation: button-loading 1s linear infinite;
+
+}
+@keyframes button-loading {
+    from {
+        transform: rotate(0turn);
+    }
+    to{
+        transform: rotate(1turn);
+    }
+}
+
+    </style>
+        <script>
+  window.addEventListener("load",()=>{
+         
+  // const loader = document.querySelector(".loader");
+  // loader.className += " hidden";
+ 
+    let path=window.location.href
+    let links=document.querySelectorAll("li a")
+    let links_li=document.querySelectorAll("li")
+    let add=window.location.hostname
+    for(i=0;i<links.length;i++){
+      if(path==links[i].href){
+links_li[i].classList +=" active"
+        }
+      }
+    }
+  )
+ 
+</script>
+  </head>
+
+  <body class="antialiased">
+    <header class="h-16 flex items-center border-b border-grey-300">
+      <aside class="px-4 w-32 flex items-center justify-center">
+        <h1 class="font-bold">P.P.E.M.A</h1>
+      </aside>
+
+      <nav class="h-full flex-1 flex items-center justify-center">
+        <ul class="h-16 flex space-x-3">
+          <li class="h-16 flex items-center ">
+            <a href="/shuttle/home">Home</a>
+          </li>
+          <li class="h-16 flex items-center">
+            <a href="/shuttle/view/deposit">Payments</a>
+          </li>
+
+          <li class="h-16 flex items-center">
+            <a href="/shuttle/view/driver">Drivers</a>
+          </li>
+        </ul>
+      </nav>
+      <aside class="flex items-center pr-3 space-x-3">
+      
+
+     
+        <button
+          class="rounded-full hover:bg-gray-300 h-12 w-12 flex items-center justify-center"
+        >
+        
+     <a href="/user/logout">  <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#000000"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M10 3H6a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h4M16 17l5-5-5-5M19.8 12H9"
+            />
+          </svg></a></button>
+      </aside>
+    </header>
+       <main class="mb-8 px-2 font-body">
+         
+
+

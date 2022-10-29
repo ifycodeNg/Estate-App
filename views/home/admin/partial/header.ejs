@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+<link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css" />
+<script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
+<script>
+  window.addEventListener("load",()=>{
+         
+  const loader = document.querySelector(".loader");
+  loader.className += " hidden";
+ 
+    let path=window.location.href
+    let links=document.querySelectorAll("li a")
+    let add=window.location.hostname
+    let current=document.getElementById("current")
+    let resident_add=document.querySelector(".resident_add")
+    for(i=0;i<links.length;i++){
+      if(path==links[i].href){
+        if(path.includes(`#resident`,`#business`, `#revenue` , `#shuttle`,'#verification')){   
+        links[i].classList.remove("active")
+        }
+        links[i].classList +=" active"
+        current.innerText=links[i].innerText
+      }
+    }
+  })
+ function changeState(){
+   let radio_btn=document.getElementById("nav-toggle")
+    let val=radio_btn.checked
+    value=val?"false":"true"
+   if(value.includes("true")){
+     radio_btn.checked=false 
+     
+  }
+  else if(value.includes("false")){
+     radio_btn.checked=true
+     
+  }
+ 
+   
+ }
+</script>
+</head>
+<body>
+
+   <div class="loader">
+      <img src="/img/loading.gif" alt="Loading .... " />
+    </div>
+  
+    <input type="checkbox" name="" id="nav-toggle" onclick="changeState()">
+    <div class="sidebar">
+        <div class="sidebar_brand">
+            <h2><span ><i class="las la-landmark"></i></span> <span>P.P.E.M.A</span> </h2>
+
+        </div>
+        <div class="sidebar_menu">
+           <ul>
+               
+        <% if (user){%> 
+        <li><a href="/home/dashboard" ><span><i class="las la-landmark"></i></span><span>
+                   Dashboard
+               </span></a></li>
+          <li class="heading">
+       <span>
+        <span><i class="las la-tools"></i></span>
+                       <span>
+                        Management
+                        </span>
+       </span>
+                      
+                      
+                   
+            </li>
+<% if (user.is_ResidentManager || user.is_SuperAdmin){%>
+               <li class="menu-item" id="resident">
+                     <a class="btn" id="#resident" href="#resident">
+                      
+                       <span><i class="las la-users"></i></span>
+                       <span>
+                        Resident Management
+                        </span>
+                   </a>
+                   <div class="menu-item__sub">
+                    <a href="/admin/residents"><span><i class="las la-users"></i></span> View All Residents</a>
+                    <a href="/admin/active/resident"><span><i class="las la-users"></i></span> Active Residents</a>
+                    <a href="/admin/inactive/resident"><span><i class="las la-users"></i></span> InActive Residents</a>
+                   <a href="/admin/add/tenant"><span><i class="las la-users"></i></span> Add Resident</a>
+                      <a href="/admin/view/domestic/staff"><span><i class="las la-users"></i></span> Domestic Staffs</a>
+                      <a href="/admin/add/domestic/staff"><span><i class="las la-users"></i></span> Add Staffs</a>
+ 
+                        <a href="/admin/resident/occupants"><span><i class="las la-users"></i></span>Occupants</a>
+ 
+                   <a href="/admin/resident/add/payment"><span><i class="las la-users"></i></span> Record Payment</a>
+                       <a href="/admin/resident/pending"><span><i class="las la-users"></i></span>Pending Payments</a>
+                   <a href="/admin/resident/confirmed"><span><i class="las la-users"></i></span>Confirmed Payments</a>
+                       <a href="/admin/resident/rejected"><span><i class="las la-users"></i></span>Rejected Payments</a>
+                   <a href="/admin/payment/resident/paid"><span><i class="las la-users"></i></span>Bal & Paid</a>
+                    
+                   </div>
+           </li>
+           <% } %>
+<% if (user.is_shuttleManager || user.is_SuperAdmin){%>
+               <li class="menu-item" id="shuttle">
+                <a href="#shuttle"><span ><i class="las la-bus"></i></span><span>
+                   Shuttle Bus Management
+               </span></a>
+                <div class="menu-item__sub">
+                    <a href="/admin/shuttle/management"><span><i class="las la-users"></i></span> View Shuttle Owners</a>
+                     <a href="/admin/drivers"><span><i class="las la-users"></i></span> Shuttle Drivers</a>
+
+                   <a href="/admin/add/shuttle/owner"><span><i class="las la-users"></i></span> Add Shuttle Owner</a>
+                   <a href="/admin/shuttle/add/payment"><span><i class="las la-users"></i></span> Record Payment</a>
+                       <a href="/admin/deposit/shuttle"><span><i class="las la-users"></i></span>Pending Payments</a>
+                   <a href="/admin/shuttle/confirmed"><span><i class="las la-users"></i></span>Confirmed Payments</a>
+                       <a href="/admin/payment/shuttle/rejected"><span><i class="las la-users"></i></span>Rejected Payments</a>
+                   <a href="#"><span><i class="las la-users"></i></span>Bal & Paid</a>
+                    
+                   </div>
+               
+               </li>
+ <% } %>
+ <% if (user.is_CornerShopManager || user.is_SuperAdmin){%>
+               <li class="menu-item" id="business">
+                <a    href="#business"><span><i class="las la-store"></i></span><span>
+                   Corner Shop Management
+               </span></a>
+                 <div class="menu-item__sub">
+                    <a href="/admin/business/management"><span><i class="las la-users"></i></span> View Shop Owners</a>
+                   <a href="/admin/add/business/owner"><span><i class="las la-users"></i></span> Add Shop Owner</a>
+                   <a href="/admin/business/add/payment"><span><i class="las la-users"></i></span> Record Payment</a>
+                       <a href="/admin/pending/business"><span><i class="las la-users"></i></span>Pending Payments</a>
+                   <a href="/admin/confirmed/business"><span><i class="las la-users"></i></span>Confirmed Payments</a>
+                       <a href="/admin/rejected/business"><span><i class="las la-users"></i></span>Rejected Payments</a>
+                   <a href="/admin/payment/business/paid"><span><i class="las la-users"></i></span>Bal & Paid</a>
+                    
+                   </div>
+               </li>
+ <% } %>
+  <% if (user.is_RevenueManager || user.is_SuperAdmin){%>
+               <li class="menu-item" id="revenue">
+                <a  href="#revenue"><span><i class="las la-donate"></i></span><span>
+                   Revenue Management
+               </span></a>
+                 <div class="menu-item__sub">
+                    <a href="/admin/view/revenue" ><span><i class="las la-users"></i></span> View Payments</a>
+      
+                   <a href="/admin/add/payment"><span><i class="las la-users"></i></span> Record Payment</a>
+                       <a href="/admin/outstanding"><span><i class="las la-users"></i></span>Outstanding Payments</a>
+                 
+                   <a href="/admin/revenue/paid/user"><span><i class="las la-users"></i></span> Paid</a>
+                    
+                   </div>
+               
+               </li>
+ <% } %>
+             
+  <% if ( user.is_SuperAdmin){%>
+  <li class="menu-item" id="user">
+                   <a href="#user"><span><i class="las la-user"></i></span><span>
+                   User Management
+               </span></a>
+                <div class="menu-item__sub">
+                      <a href="/admin/profile"><span><i class="las la-users"></i></span> My Profile</a>
+                    <a href="/admin/view/users"><span><i class="las la-users"></i></span> View Users</a>
+      
+                   <a href="/admin/add/users"><span><i class="las la-users"></i></span> Add User</a>
+                     
+                    
+                   </div>
+               
+               </li>
+
+<% } %>
+<% if (user.is_shuttleManager || user.is_RevenueManager || user.is_ResidentManager || user.is_CornerShopManager || user.is_Security){%>
+<li class="menu-item" id="user">
+                   <a href="#user"><span><i class="las la-user"></i></span><span>
+                   User Profile
+               </span></a>
+                <div class="menu-item__sub">
+                      <a href="/admin/profile"><span><i class="las la-users"></i></span> My Profile</a>
+                 
+                    
+                   </div>
+               
+               </li>
+
+<% } %>
+
+  <% if (user.is_SuperAdmin){%>
+              <li class="menu-item" id="apartment">
+                   <a href="#apartment"><span><i class="las la-building"></i></span><span>
+                   Apartment Management
+               </span></a>
+                <div class="menu-item__sub">
+                      <a href="/admin/apartments"><span><i class="las la-users"></i></span> View Apartments</a>
+                    <a href="/admin/houses/add"><span><i class="las la-users"></i></span> Add Apartment</a>
+      
+                   </div>
+               
+               </li>
+           <% } %>   
+           <% if (user.is_Security || user.is_SuperAdmin){%>
+            <li class="menu-item" id="verification">
+              <a href="#verification"><span><i class="las la-user"></i></span><span>
+                Verification Module
+             </span></a>
+              <div class="menu-item__sub">
+                    <a href="/admin/verify"><span><i class="las la-users"></i></span> Verify Staff</a>
+                  
+    
+                 </div>
+             
+             </li>
+         <% } %>   
+
+                <li><a href="/user/logout"><span> <i class="las la-sign-out-alt"></i></span><span>
+                  Logout
+               </span></a></li>
+              
+           
+<% } %> 
+
+ </ul>
+        </div>
+
+
+
+    </div>
+ 

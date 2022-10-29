@@ -1,0 +1,47 @@
+<%- include('./partial/header'); %>
+   
+      <section class="py-8">
+      
+      </section>
+      <a
+        href="/shuttle/add/driver"
+        class="md:w-full bg-gray-900 text-white font-bold py-2 px-4  rounded"
+        >Add More Drivers</a
+      >
+      <div class="overflow-x-auto">
+        <table class=" mt-5 shadow-lg bg-white">
+        <tr>
+          <th class="bg-blue-100 border text-left px-8 py-4">S/N</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">Full Name</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">Telephone</th>
+
+          <th class="bg-blue-100 border text-left px-8 py-4">Home Address</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">Location</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">Vehicle No</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">Vehicle Type</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">Status</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">Action</th>
+        </tr>
+
+        <% if (body){%> <% for (let i=0; i < body.length; i++){%>
+        <tr>
+          <td class="border px-8 py-4"><%=(i +1)%></td>
+
+          <td class="border px-8 py-4"><%=body[i].fullname%></td>
+          <td class="border px-8 py-4"><%=body[i].telephone%></td>
+
+          <td class="border px-8 py-4"><%=body[i].address%></td>
+          <td class="border px-8 py-4"><%=body[i].location%></td>
+          <td class="border px-8 py-4"><%=body[i].vehicle_no%></td>
+          <td class="border px-8 py-4"><%=body[i].vehicle_type%></td>
+          <td class="border px-8 py-4"><%=body[i].status%></td>
+          <td class="border px-8 py-4">
+            <a href="/shuttle/delete/driver/<%=body[i].driver_id%>">Delete</a>
+            <a href="/shuttle/edit/driver/<%=body[i].driver_id%>">Edit</a>
+          </td>
+        </tr>
+        <% } %> <% } %>
+      </table>
+    </div>
+  </body>
+</html>

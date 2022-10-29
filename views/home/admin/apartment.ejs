@@ -1,0 +1,167 @@
+<%- include('./partial/header') %>
+ <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+           
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+        
+             <div class="breadcrumb">
+<span> Apartment Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Add An Apartment</h3>
+                               
+                            </div>
+                        
+                        
+ 
+                  </div>
+                <form id="form">
+                    <div class="form-row">
+ <label for="">House Number</label>
+                   <input id="houseNo" required type="text">
+                    </div>
+                  <div class="form-row">
+ <label for="">House Type</label>
+                   <input id="houseType" required type="text">
+                    </div>
+                      <div class="form-row">
+ <label for="">Drive Number</label>
+                  <select required name="" id="driveNo">
+                      <option value="">
+                               Add Drive No
+                            </option>
+                         <option value="1">
+                                Drive 1
+                            </option>
+                            <option value="2">
+                                Drive 2
+                            </option>
+                             <option value="3">
+                                Drive 3
+                            </option>
+                             <option value="4">
+                                Drive 4
+                            </option>
+                             <option value="5">
+                                Drive 5
+                            </option>
+                             <option value="6">
+                                Drive 6
+                            </option>
+                  </select>
+                    </div>
+                     
+                 
+                            <button onclick="load() " id="submit">
+                                 <span>Create Apartment</span>
+                        </button>
+               
+                </form>
+              </div>
+             
+          </div>
+                <div id="snackbar">
+      
+           </div>
+        </main>
+        
+        
+    </div>
+   
+    </div>
+      
+
+    <script>
+      window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+       function load() {
+        let snackBar=document.getElementById("snackbar")
+        let btn = document.getElementById("submit");
+        let form=document.getElementById("form")
+        form.addEventListener("submit",(e)=>{
+          e.preventDefault()
+        btn.classList.add("loading")
+        btn.disabled=true
+   })
+        let obj = {
+          driveNo: document.getElementById("driveNo"),
+          houseNo: document.getElementById("houseNo"),
+          houseType: document.getElementById("houseType"),
+        
+        };
+
+        let requestObj =
+          "driveNo=" +
+          obj.driveNo.value +
+          "&houseNo=" +
+          obj.houseNo.value +
+          "&houseType=" +
+          obj.houseType.value 
+      let xhr = new XMLHttpRequest();
+        console.log(xhr.readyState);
+
+        xhr.onload = () => {
+          obj.driveNo.value = "";
+          obj.houseNo.value = "";
+          obj.houseType.value = "";
+         
+          btn.disabled=false
+          snackBar.innerText = ` ${xhr.responseText}`
+          console.log(xhr.responseText);
+          snackBar.className="show"
+                btn.classList.remove("loading")
+                setTimeout(()=>{
+                    snackBar.className=snackBar.className.replace("show","")
+
+                },3000)  
+        };
+
+        xhr.open("post", "/admin/add/apartment", true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(requestObj);
+      }
+    </script>
+  </body>
+</html>

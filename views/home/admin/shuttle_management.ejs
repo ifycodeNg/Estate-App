@@ -1,0 +1,179 @@
+<%- include('./partial/header') %>
+            <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+            <div class="search-wrapper">
+                <span class="las la-search">
+                 </span>
+                    <input type="search" name="" placeholder="Search Here" id="">
+                
+            </div>
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+           <div class="breadcrumb">
+<span> Shuttle Bus Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>All Shuttle Bus Owner</h3>
+                                                           </div>
+                       
+
+                        
+                 
+                      
+                                            </div>
+                        <div class="card-body" >
+                        <table width="100%" id="table_shuttle">
+                                <thead>
+                                    <tr>
+                                          <td>
+                                      S/N
+                                        
+                                    </td>
+                                       
+                                <td>
+                                        Shuttle Owner
+                                        
+                                    </td>
+                                      <td>
+                                        Username
+                                        
+                                    </td>
+                                    <td>
+                                      UId
+                                      
+                                  </td>
+                                <td>
+                                        Telephone No
+                                        
+                                    </td>
+                                <td>
+                                       No Of Bus
+                                        
+                                    </td>
+                                  
+                                 <td>
+                                       Status
+                                        
+                                    </td>
+                                     <% if (user.is_shuttleManager || user.is_SuperAdmin){%> 
+                                <td>
+                                    Action
+                                </td>
+                                 <% } %>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                  
+                                     
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+   <script>
+       function load_data() {
+   let xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+    let data=JSON.parse(xhr.responseText)
+    console.log(data)
+    add_data(data)
+ };
+    xhr.open("get", `/admin/shuttle`, true);
+    xhr.send();
+
+}
+load_data()
+function add_data(data){
+let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+user_name.textContent=data.profile[0].fullname
+
+let table=document.getElementById("table_shuttle")  
+
+for (let i = 0; i < data.body.length; i++) {
+let tr=document.createElement("tr")
+tr.innerHTML=
+ `<td>${i+1}</td>`+
+ `<td>`+data.body[i].fullname +`</td>`+
+  `<td>`+data.body[i].username +`</td>`+
+  `<td>`+data.body[i].unique_id +`</td>`+
+ `<td>${data.body[i].telephone  }</td>`+
+ `<td>${data.body[i].no_bus}</td>`+
+ `<td>`+
+     `<span style="display:flex;">`+
+      `<span class="status green"></span>`+data.body[i].status +
+      `</span>`
+  +` </td>`
+   +
+   `<td class="btn_resident">`+
+      <% if (user.is_SuperAdmin){%> 
+ 
+    ` <button><a href="/admin/shuttle/delete/${data.body[i].userId}"><span>
+             Delete
+               </span></a></button>`+
+              <% } %>     
+        <% if (user.is_shuttleManager || user.is_SuperAdmin ){%>                                       
+              ` <button><a href="/admin/shuttle/update/${data.body[i].userId}"><span>
+               Edit
+          </span></a></button>`+
+   ` </td>`
+    <% } %>
+    table.append(tr) 
+ 
+ }
+  
+ }
+   function load(id,given,status){
+        let requestObj = "status=" + status + "&given=" + given
+        let xhr = new XMLHttpRequest();
+        console.log(xhr.readyState);
+        xhr.onload = () => {
+          alert(xhr.responseText)
+          window.location.reload()
+        };
+
+        xhr.open("post", `/admin/shuttle`, true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(requestObj);
+     }
+
+   </script>
+ 
+  
+  </body>
+</html>

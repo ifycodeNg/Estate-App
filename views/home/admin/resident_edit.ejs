@@ -1,0 +1,257 @@
+<%- include('./partial/header'); %>
+ <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+            
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role">Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span>Resident Management </span>
+<span>View Residents </span>
+<span id="current">Edit Resident</span>
+
+                    </div>
+                <div>
+               <span class="exit" onclick=back()><i class="las la-long-arrow-alt-left"></i></span>
+            </div >
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Edit Resident</h3>
+                               
+                            </div>
+                        
+                        
+ 
+                  </div>
+                <form id="form">
+                    <div class="form-row">
+ <label for="">Fullname</label>
+                                        <input value="<%=body[0].fullname%>" type="text" name="name"
+                                                        id="name" required>
+
+                    </div>
+                    <div class="form-row">
+ <label for="">Username</label>
+                                        <input value="<%=body[0].username%>" type="text" name="name"
+                                                        id="username" required>
+
+                    </div>
+                    <div class="form-row">
+<label for="">Password</label>
+                                        <input  type="text" name="name"
+                                                        id="password" >
+
+                    </div>
+                    
+                  <div class="form-row">
+ <label for="">Telephone</label>
+                   <input id="telephone" value="<%=body[0].telephone%>" required type="tel">
+                    </div>
+                      <div class="form-row">
+ <label for="">Drive Number</label>
+                  <select onchange="clicked()"  required name="" id="driveNo">
+                       <option disabled selected value=" <%=body[0].driveNo%>">
+                           Drive     <%=body[0].driveNo%>
+                            </option>
+                         <option value="1">
+                                Drive 1
+                            </option>
+                            <option value="2">
+                                Drive 2
+                            </option>
+                             <option value="3">
+                                Drive 3
+                            </option>
+                             <option value="4">
+                                Drive 4
+                            </option>
+                             <option value="5">
+                                Drive 5
+                            </option>
+                             <option value="6">
+                                Drive 6
+                            </option>
+                  </select>
+                    </div>
+                      <div class="form-row">
+ <label for="">House Number</label>
+                   <select name="" id="houseNo">
+                                <option selected value="<%=body[0].houseNo%>" disabled>
+<%=body[0].houseNo%>
+                                </option>                            
+
+                  </select>
+                    </div>
+                   
+                    <div class="form-row">
+                         <label for="">Status</label>
+                                     <select id="status">
+                                                        <option value="<%=body[0].status%>" selected disabled>
+                                                            <%if (body[0].status=="InActive" ){%>
+                                                                Deactivated
+
+                                                                <%}%>
+                                                                    <% if (body[0].status=="Active" ){%>
+                                                                        Activated
+                                                                        <%}%>
+                                                        </option>
+                                                        <option value="InActive">Deactivate</option>
+
+                                                        <option value="Active">Activate</option>
+
+                                                    </select>
+                    </div>
+                    
+                 
+                        <button id="submit" onclick="load() ">
+                            <span id="text">Edit</span>
+                        </button>
+                   
+                </form>
+              </div>
+             
+          </div>
+             <div id="snackbar">
+      
+           </div>
+        </main>
+        
+        
+    </div>
+   
+    </div>
+      
+</body>
+
+
+
+
+
+    <script>
+      function back() {
+        history.back(-1)
+      }
+      window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+            function clicked() {
+          let select=document.getElementById("driveNo") 
+          let val= select.value 
+          console.log(val)
+          let xhr = new XMLHttpRequest();
+          let requestObj="driveNo="+val;
+          console.log(xhr.readyState);
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)  
+              add_data(data)
+         };
+
+        xhr.open("get", `/apartments/${val}`, true);
+        xhr.send(requestObj); 
+
+      }
+      function add_data(data){
+    let residents=document.getElementById("houseNo") 
+    residents.innerHTML='' 
+    for (let i = 0; i < data.length; i++) {
+      console.log(data.length)
+       let option=document.createElement("option")
+       option.innerHTML=`<option value="${data[i].houseNo}">${data[i].houseNo}</option>`
+       residents.append(option)
+    }
+  }
+      function load() {  
+        let text =document.getElementById("text")
+        let snackBar=document.getElementById("snackbar")
+        let btn = document.getElementById("submit");
+        let form=document.getElementById("form")
+        form.addEventListener("submit",(e)=>{
+          e.preventDefault()
+        btn.classList.add("loading")
+          text.style.visibility="hidden"
+        btn.disabled=true
+   })
+
+        let obj = {
+          telephone: document.getElementById("telephone"),
+          name: document.getElementById("name"),
+        username : document.getElementById("username"),
+          houseNo: document.getElementById("houseNo"),
+          driveNo: document.getElementById("driveNo"),
+          status: document.getElementById("status"),
+            password: document.getElementById("password")
+          
+        };
+        let xhr = new XMLHttpRequest()
+       xhr.onload = () => {
+             
+                btn.disabled=false
+                snackBar.innerText = ` ${xhr.responseText}`
+              text.style.visibility="visible"
+                snackBar.className="show"
+                btn.classList.remove("loading")
+                setTimeout(()=>{
+                    snackBar.className=snackBar.className.replace("show","")
+
+                },3000)  
+                
+                console.log(xhr.responseText)
+            
+       }  
+
+            let requestObj = "name=" + obj.name.value + 
+            "&telephone=" + obj.telephone.value + 
+            "&status=" + obj.status.value + 
+            "&username=" + obj.username.value +
+             "&password=" + obj.password.value + "&driveNo=" + 
+             obj.driveNo.value + "&houseNo=" + obj.houseNo.value
+
+            xhr.open("post", "/admin/resident/edit/<%=body[0].tenId%>", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send(
+                requestObj
+            )
+     
+      }
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>

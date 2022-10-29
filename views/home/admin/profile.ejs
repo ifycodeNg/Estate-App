@@ -1,0 +1,208 @@
+<%- include('./partial/header') %>
+       <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+                  
+              Dashboard
+               
+            </h2>
+            
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name"><%=profile[0].fullname%></h4>
+                <small> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+ <div class="breadcrumb">
+<span> User Management </span>
+<span id="current"></span>
+
+                    </div>        
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  
+                        <div class="card-header">
+                         
+                            <div style="background: #fff; width: 100%; padding: 10px; border-radius: 5px;">
+                                <h3>Profile </h3>
+                               
+                            </div>
+                        </div>
+                        
+                        <div class="profile_details">
+                          <div class="profile">
+
+
+                                     <% if (profile[0].image ){%>
+                                                                        
+                               <img src=/upload/<%=profile[0].image%> height="100" width="100" alt="">
+                               
+                                                                          
+                                    <% } %>
+
+                                        <% if (!profile[0].image){%>
+                                                                        
+                             <img src="/img/avatar.svg" height="100" width="100" alt="">
+                               
+                                                                          
+                                    <% } %>
+
+                              
+                              <div><p > 
+                                <small style="font-weight: bold; font-size: 20px;">Fullname </small> <small ><%=profile[0].fullname%></small> </p>
+                             <p>
+                               <small style="font-weight: bold; font-size: 20px;">Telephone </small> <small ><%=profile[0].telephone%></small>
+                              </p>
+                              <p> <small style="font-weight: bold; font-size: 20px;">Role </small> <small ><%=profile[0].role%></small></p>
+                              <p> <small style="font-weight: bold; font-size: 20px;">Username </small> <small ><%=profile[0].username%></small></p>
+                              <p> <small style="font-weight: bold; font-size: 20px;">Password </small> <small >Hidden</small></p>
+                          </div>
+                          </div>
+
+                          <div class="edit">
+                            <p>Edit Profile Info</p>
+                            <div class="user_pic">
+                              <div >
+ <img src="/img/avatar.svg"   height="100" width="100" alt="" id="image"> 
+                              </div>
+                               
+                                <div class="camera">
+                                       <img src="/img/camera.svg" onclick="clicked()"   width="50" height="50" alt="">
+                                </div>                       
+                           
+                                <input type="file" accept="image/*" id="upload" hidden onchange="preview_image(event)">
+                              </div>
+                            
+                           
+                            <form id="form">
+ 
+                            <div class="form-edit">
+                              <label for="">
+                                Fullname
+                              </label>
+                              <input id="name" value=<%=profile[0].fullname%> type="text">
+                              </div>
+                      
+                           <div class="form-edit">
+                              <label for="">
+                                Username
+                              </label>
+                              <input id="username" value=<%=profile[0].username%> type="text">
+                              </div>
+                           <div class="form-edit">
+                              <label for="">
+                             Telephone
+                              </label>
+                              <input id="telephone" value=<%=profile[0].telephone%> type="text">
+                              </div>
+                           <div class="form-edit">
+                             
+                              </div>
+                         
+                         
+
+ 
+</form>
+                             <button id="btn" onclick="load()">
+                            <span id="text">Update Profile</span>
+                        </button>
+                            
+                            <button style="background-color: black; ">
+    <a href="/u/password/change/"> 
+      <span style="color: #fff;">Update Password</span></a>
+                           
+                        </button>
+                          </div>
+                        </div>
+ 
+                 
+              
+                  
+              </div>
+             
+          </div>
+               <div id="snackbar">
+      
+           </div>
+        </main>
+        
+        
+    </div>
+    
+    </div>
+
+   
+  </body>
+  <script>
+     function clicked() {
+     const file=document.getElementById("upload")
+     file.click()
+    
+   }
+function preview_image(event) {
+  let reader=new FileReader()
+  reader.onload=()=>{
+    let output=document.getElementById("image")
+    output.src=reader.result
+  }
+  reader.readAsDataURL(event.target.files[0])
+}
+     function load() {
+           let text=document.getElementById("text")
+            let form=document.getElementById("form")
+        let btn=document.getElementById("btn")
+        let snackBar=document.getElementById("snackbar")
+            
+            form.addEventListener("submit",(e=>{
+                e.preventDefault()
+                btn.classList.add("loading")
+                text.style.visibility="hidden"
+                btn.disabled=true
+            }))
+            
+             let obj = {
+                name: document.getElementById("name"),
+                username: document.getElementById("username"),
+                telephone: document.getElementById("telephone"),
+                image: document.getElementById("upload"),
+               
+            }
+            let formData = new FormData()
+          
+            formData.append("image", obj.image.files[0])
+            formData.append("name", obj.name.value)
+            formData.append("username", obj.username.value)
+            formData.append("telephone", obj.telephone.value)
+
+            let xhr = new XMLHttpRequest()
+            console.log(xhr.readyState)
+
+            xhr.onload = () => {
+               btn.disabled=false
+                snackBar.innerText = ` ${xhr.responseText}`
+                text.style.visibility="visible"
+                btn.classList.remove("loading")
+               console.log(xhr.responseText)
+            }
+
+            xhr.open("post", "/user/update", true);
+
+            xhr.send(
+                formData
+            )
+
+        }
+
+  </script>
+</html>

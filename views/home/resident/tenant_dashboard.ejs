@@ -1,0 +1,110 @@
+<%- include('./partial/header'); %>
+      <section class="py-8">
+        <h1 class="mb-4">Welcome To the <span class="font-bold"> Prince and Princess Estate Management Application</span></h1>
+        <h3>
+          
+          <span class=" mb-4">Welcome Home <span class="text-lg font-bold"><%=data[0].fullname %></span> </span> <br />
+         <span id="greeting"></span> what`s your plan today <%=data[0].fullname %>
+        </h3>
+      </section>
+      <section
+        class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:grid-cols-3 gap-4"
+      >
+        <div class="rounded border border-gray-300 p-6">
+          <h2 class="mb-4 text-lg font-bold">Apartment Details</h2>
+          <section class="my-3 flex items-center">
+            <span
+              class="flex items-center justify-center bg-yellow-400 text-black h-10 w-10 rounded-full"
+            >
+            </span>
+
+            <h3 class="ml-2">
+              Drive <%=data[0].driveNo%> <br />House Number <%=data[0].houseNo%>
+            </h3>
+          </section>
+
+                    <h2 class="mb-4 text-lg font-bold">Account Details</h2>
+                    <% if (paid.length > 0){%>
+                    <section class="my-3 grid grid-cols-2 ">
+          <span> Total Paid </span> <span>&#8358 <%=paid[0].amount_paid%> </span>
+ <span>2021 Due </span> <span>&#8358 <%=paid[0].amount%> </span>
+ <span>2021 Balance </span> <span>&#8358 <%=paid[0].total_due_bal%> </span>
+</section>
+<% } %>
+        </div>
+                    <% if (payment.length > 0){%>
+        <div class="rounded border border-gray-300 p-3">
+          <h2 class="mb-4 text-lg font-bold text-center">Payments / Deposits Made</h2>
+        <section class="my-3 flex-cols">
+          <div class="border-b h-12 flex items-center justify-between">
+               <span class="text-lg font-bold">Amount &#8358 </span>
+                <span class="text-lg font-bold">Status</span>
+            </div>
+ <% for (let i=0; i < payment.length; i++){%>
+          
+            <div class="border-b h-12 flex items-center justify-between">
+             <span>&#8358 <%=payment[i].amount%></span>
+              <span><%=payment[i].status%></span>
+            </div>
+           <% } %> 
+            
+            </div>
+            <% } %>
+
+          <div class="rounded border border-gray-300 p-3">
+            <h2 class="mb-4 text-lg font-bold text-center">Resident Info</h2>
+            <section class="flex flex-col items-center justify-center">
+              <span class="inline-block h-24 rounded-full overflow-hidden">
+ <% if (data[0].image ){%>
+                                                                        
+                               <img src=/upload/<%=data[0].image%> class="h-full"  
+                width="100" class="object-cover" alt="">
+                               
+                                                                          
+                                    <% } %>
+
+                                        <% if (data[0].image ==null){%>
+                                                                        
+                             <img src="/img/avatar.svg"   height="100"
+                width="100" class="object-cover" alt="">
+                               
+                                                                          
+                                    <% } %>
+
+
+
+
+           
+
+            </span>
+            <h3 class="mt-3 text-x1 font-bold"><%=data[0].fullname %></h3>
+            <span class="text-gray-600"> <%=data[0].telephone %> </span>
+          </section>
+        
+            <button class="w-full h-10 mt-2 rounded bg-blue-200 ">
+           <a href="/profile/edit">Edit Personal Profile</a>
+          </button>
+            <button class="w-full h-10 mt-2 rounded border-.5 border-black ">
+           <a href="/resident/p/change/">Change Password</a>
+          </button>
+        </div>
+      </section>
+    </main>
+  </body>
+  <script>
+    date_time=new Date().getHours()
+    greeting_text=document.getElementById("greeting")
+    if(date_time<12){
+greeting_text.textContent="Good Morning" 
+
+}
+ else  if(date_time == 12 || date_time > 12){
+greeting_text.textContent="Good Afternoon" 
+
+}
+else if(date_time > 16){
+greeting_text.textContent="Good Evening" 
+
+}
+  </script>
+</html>

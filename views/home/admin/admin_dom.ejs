@@ -1,0 +1,278 @@
+<%- include('./partial/header') %>
+  <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+          <div class="search-wrapper">
+                <span onclick=search() class="las la-search">
+                 </span>
+                    <input type="search" name="" placeholder="Search " id="search_resident">
+                
+            </div>
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+        
+             <div class="breadcrumb">
+<span> Resident Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>All Domestic Staffs</h3>
+                               
+                            </div>
+                        
+                
+                      
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%" id="user_table">
+                                <thead>
+                                    <tr>
+                                        <td>S/N</td>
+                                <td>
+                                       Profile Pic
+                                        
+                                    </td>
+                                    <td>
+                                      Unique Id
+                                    </td>
+                                <td>
+                                      Fullname
+                                        
+                                    </td>
+                               
+                                    <td>
+                                       Telephone
+                                        
+                                    </td>
+                                     <td>
+                                       Address
+                                        
+                                    </td>
+                                    
+                                    <td>
+                                       Origin
+                                        
+                                    </td>
+                                 <td>
+                                       Employer
+                                        
+                                    </td>
+                                    <td>JobType</td>
+                                    <td>Job Role</td>
+                                    <td>House No</td>
+                                    <td>Drive No</td>
+                                     <td>
+                                       Status
+                                        
+                                    </td></tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+  
+    <script>
+let residents_arr
+function load() {
+let xhr = new XMLHttpRequest();
+xhr.onload = () => {  
+let data=JSON.parse(xhr.responseText)
+add_data(data)
+residents_arr=data.data
+ };
+
+xhr.open("get", `/api/domestic/staff`, true);
+xhr.send();
+      }
+load()
+function add_data(data){
+let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+user_name.textContent=data.profile[0].fullname
+
+let table=document.getElementById("user_table")  
+for (let i = 0; i < data.data.length; i++) {
+let tr=document.createElement("tr")
+if(data.data[i].status=="Active"){
+  console.log("done")
+ tr.innerHTML=
+ `<td>${i+1}</td>`+
+   `<td><img src="/upload/${data.data[i].image}" height="50" width="50" style="object-fit:cover;border-radius:50%;" alt="Avatar"></td>`+
+   `<td>`+data.data[i].Uuid +`</td>`+
+ `<td>`+data.data[i].fullname +`</td>`+
+ 
+ `<td>${data.data[i].telephone  }</td>`+
+  `<td>${data.data[i].address} </td>`+
+ `<td>${data.data[i].location}</td>`+
+ `<td>${data.data[i].employer}</td>`+
+ `<td>${data.data[i].jobType}</td>`+
+ `<td>${data.data[i].department}</td>`+
+ `<td>${data.data[i].houseNo}</td>`+
+ `<td>${data.data[i].driveNo}</td>`+
+ `<td>`+
+      `<span class="status green"></span>`+ data.data[i].status
+  +` </td>`
+    
+    table.append(tr) 
+}
+else{
+ 
+tr.innerHTML=
+ `<td>${i+1}</td>`+
+ `<td>Avatar</td>`+
+ `<td>`+data.data[i].Uuid +`</td>`+
+ `<td>`+data.data[i].fullname +`</td>`+
+ `<td>`+data.data[i].Uuid +`</td>`+
+ `<td>${data.data[i].telephone  }</td>`+
+  `<td>${data.data[i].address} </td>`+
+ `<td>${data.data[i].location}</td>`+
+ `<td>${data.data[i].employer}</td>`+
+ `<td>${data.data[i].jobType}</td>`+
+ `<td>${data.data[i].department}</td>`+
+ `<td>${data.data[i].houseNo}</td>`+
+ `<td>${data.data[i].driveNo}</td>`+
+ `<td>`+
+  `<span style="display:flex;">`+
+      `<span class="status red"></span>`+ data.data[i].status
+     + `</span>`
+  +` </td>`    
+  table.append(tr) 
+
+}
+
+ 
+ }
+  
+ }
+function search() {
+     let input_val=document.getElementById("search_resident") 
+     input_value=input_val.value
+     if(!input_value){
+return false
+     }
+          let table=document.getElementById("user_table") 
+         let xhr = new XMLHttpRequest();
+ console.log(xhr.readyState);
+          xhr.onload = () => {
+            let count=1
+            let rowCount=table.rows.length         
+              let data=JSON.parse(xhr.responseText)
+                       for(let i=count;i<rowCount;i++){
+              table.deleteRow(count)
+                    }
+                    console.log(data)
+              add_data(data)
+
+         };
+        xhr.open("get", `/domestic/search/${input_value}`, true);
+        xhr.send();
+}
+var currentFocus;
+function autocomplete(inp, arr) {
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+ closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      this.parentNode.appendChild(a);
+  for (i = 0; i < arr.length; i++) {
+       if (arr[i].fullname.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+         b = document.createElement("DIV");
+     b.innerHTML = "<strong>" + arr[i].fullname.substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].fullname.substr(val.length);
+         b.innerHTML += "<input type='hidden' value='" + arr[i].fullname + "'>";
+             b.addEventListener("click", function(e) {
+             inp.value = this.getElementsByTagName("input")[0].value;
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+   inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      
+      if (x) x = x.getElementsByTagName("div");
+      console.log(x)
+      if (e.keyCode == 40) {
+       currentFocus++;
+    addActive(x);
+      } else if (e.keyCode == 38) { //up
+  currentFocus--;
+     addActive(x);
+      } else if (e.keyCode == 13) {
+       e.preventDefault();
+        if (currentFocus > -1) {
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+     if (!x) return false;
+   removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+        for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+ 
+}
+document.addEventListener("click",(e)=>{
+    closeAllLists(e.target);
+});
+let inp=document.getElementById("search_resident")
+ function closeAllLists(elmnt) {
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+      x[i].parentNode.removeChild(x[i]);
+    }
+  }
+}
+let input_search=document.getElementById("search_resident")
+input_search.addEventListener("input",()=>{
+ autocomplete(document.getElementById("search_resident"), residents_arr);
+})
+    </script>
+  </body>
+</html>

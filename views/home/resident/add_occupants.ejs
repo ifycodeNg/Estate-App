@@ -1,0 +1,194 @@
+<%- include('./partial/header') %>
+
+
+
+
+    
+        <div class="bg-gray-100 mx-auto max-w-6xl bg-white py-20 px-12 lg:px-24 shadow-xl mb-24">
+ <section class="py-8 relative">
+     <a href="#" onclick=back() class="nav__link absolute left-0">
+    <i class="material-icons nav__icon">arrow_back</i>
+    <span class="nav__text font-body sm:invisible">Back</span>
+  </a>
+            <h3 class="text-center font-bold text-lg">Add Apartment Occupant</h3>
+          </section>
+          <form id="btn">
+            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col sm:bg-white -mx-10 ">
+
+<div class="md:w-full px-3 flex justify-center">
+              <div class="relative py-4 px-4"  > 
+                
+   
+ <img 
+                src="/img/avatar.svg"
+                class="w-48 h-48  object-cover rounded-full"
+              
+                 id="image"
+               
+                alt="Profile Picture"
+              />
+
+<div class="cursor-pointer absolute right-0  bottom-2 rounded-full bg-green-700 p-4">
+  <input type="file" accept="image/*" id="upload" hidden onchange="preview_image(event)">
+  <img
+             
+                onclick="clicked()"
+                src="/img/camera.svg"
+                height="25"
+                width="25"
+               
+                alt=""
+              />
+</div>
+            </div>
+           
+            </div>
+
+
+
+
+
+
+
+
+                <div class="-mx-3 md:flex mb-6">
+                    <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" >
+                            Full Name*
+                        </label>
+                        <input class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                            id="fullname" type="text" name="fullname" placeholder="Full Name">
+                        <div>
+                            <span class="text-red-500 text-xs italic">
+                                Please fill out this field.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 px-3">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="title">
+                            Telephone Number*
+                        </label>
+                        <input name="telephone"
+                            class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                            id="telephone" type="tel" placeholder="+234.....">
+                    </div>
+                </div>
+              
+                <div class="-mx-3 md:flex mb-2">
+                  
+                    <div class="md:w-1/2 px-3">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="job-type">
+                            Gender * 
+                        </label>
+                        <div>
+                            <select
+                                class="w-full bg-gray-200 border border-gray-200 text-black text-xs py-3 px-4 pr-8 mb-3 rounded"
+                                id="gender" name="">
+                                <option selected disabled>Gender </option>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+
+                            </select>
+                        </div>
+                    </div>
+                     <div class="md:w-1/2 px-3">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="job-type">
+                            Email Address * Optional
+                        </label>
+                        <div>
+ <input class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                            id="email" type="text" name="fullname" placeholder="Optional">
+                      
+                        </div>
+                    </div>
+                   
+                </div>
+                <div class="-mx-3 md:flex sm:flex sm:justify-center mt-2">
+                     <button
+                id="submit"
+                type="submit"
+                onclick="load()"
+                class="md:w-full bg-gray-900 text-white font-bold py-2 px-4 relative    hover:border-gray-100  cursor-pointer"
+              >
+                <span class="text">Register </span>
+              </button>
+                </div>
+            </div>
+
+
+            <h4 id="matchlist" class="text-green font-bold py-2 px-4  ">
+
+            </h4>
+        </form>
+        </div>
+    </body>
+  
+    <script>
+  function clicked() {
+     const file=document.getElementById("upload")
+     file.click()
+    
+   }
+function preview_image(event) {
+  let reader=new FileReader()
+  reader.onload=()=>{
+    let output=document.getElementById("image")
+    output.src=reader.result
+  }
+  reader.readAsDataURL(event.target.files[0])
+}
+   
+
+        function load() {
+           let form=document.getElementById("btn")
+             let btn = document.getElementById("submit")
+             let newPost = document.getElementById("matchlist")
+            let image=document.getElementById("image")
+            form.addEventListener("submit",(e=>{
+                e.preventDefault()
+                btn.classList.add("loading")
+                btn.disabled=true
+                               }))
+            let obj = {
+                image:document.getElementById("upload"),
+                fullname: document.getElementById("fullname"),
+                telephone: document.getElementById("telephone"),
+                email: document.getElementById("email"),
+                gender: document.getElementById("gender"),
+ }
+
+            let formData = new FormData()
+          
+            formData.append("image", obj.image.files[0])
+            formData.append("fullname", obj.fullname.value)
+            formData.append("email", obj.email.value)
+            formData.append("telephone", obj.telephone.value)
+            formData.append("gender", obj.gender.value)
+
+            
+
+            let xhr = new XMLHttpRequest()
+
+
+            xhr.onload = () => {
+              
+                 btn.disabled=false
+                newPost.innerText = ` ${xhr.responseText}`
+                btn.classList.remove("loading") 
+                 alert(xhr.responseText)
+                 location.reload()
+               
+            }
+
+            xhr.open("post", "/tenant/add/occupants", true);
+            xhr.send(
+                formData
+            )
+
+        }
+            function back() {
+               history.back(-1)
+            }
+    </script>
+
+</html>

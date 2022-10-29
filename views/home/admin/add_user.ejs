@@ -1,0 +1,214 @@
+<%- include('./partial/header') %>
+ <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+           
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Super Admin</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span> User Management </span>
+<span id="current">All Resident</span>
+
+                    </div>
+            
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Add A User</h3>
+                               
+                            </div>
+                        
+                        
+ 
+                  </div>
+                <form id="form">
+                    <div class="form-row">
+ <label for="">Fullname</label>
+                   <input id="name" required type="text">
+                    </div>
+                  <div class="form-row">
+ <label for="">Telephone</label>
+                   <input id="telephone" required type="text">
+                    </div>
+                      <div class="form-row active_role">
+ <label for="">Role</label>
+ <div id="check" style="margin-top: 1rem;">
+ <div>
+   <input type="checkbox" name="Super Admin">
+<label for="">Super Admin</label>
+                
+ </div>
+ <div>
+   <input type="checkbox" name="Resident Manager" >
+                <label for="">Resident Manager</label>
+                
+ </div>
+<div>
+  <input type="checkbox" name="Shuttle Bus Manager" >
+                <label for="">Shuttle Bus Manager</label>
+               
+</div>
+<div>
+  <input type="checkbox" name="Revenue Manager" >
+                 <label for="">Revenue Manager</label>
+                
+</div>
+<div>
+  <input type="checkbox" name="Corner Shop Manager" >
+                 <label for="">Corner Shop Manager</label>
+                
+</div>
+<div>
+  <input type="checkbox" name="Security" >
+                 <label for="">Security Manager</label>
+                
+</div>
+ </div>
+
+
+
+                    </div>
+                      <div class="form-row">
+ <label for="">Email Address</label>
+                   <input id="email" placeholder="Optional" type="email" type="text">
+                    </div>
+                    
+                 
+                        <button onclick="load() " id="submit">
+                            <span id="text">Create</span>
+                        </button>
+                   
+                </form>
+              </div>
+             
+          </div>
+            <div id="snackbar">
+      
+           </div>
+        </main>
+        
+        
+    </div>
+   
+    </div>
+      
+</body>
+
+
+    <script>
+function checked() {
+  let roles=[]
+   let check=document.getElementById("check").querySelectorAll("input")
+console.log(check)
+for(let i=0;i<check.length;i++){
+  console.log(check[i].checked)
+  if(check[i].checked){
+    console.log(check[i].name)
+    
+    roles.push(check[i].name)
+  }
+  else{
+
+  }
+}
+return roles.sort()
+}
+ 
+
+
+window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+
+
+
+      function load() {
+
+        let snackBar=document.getElementById("snackbar")
+        let text=document.getElementById("text")
+        let btn = document.getElementById("submit");
+        let form=document.getElementById("form")
+        form.addEventListener("submit",(e)=>{
+        e.preventDefault()
+        btn.classList.add("loading")
+        btn.disabled=true
+        text.style.visibility="hidden"    
+
+        })
+        let obj = {
+          email: document.getElementById("email"),
+          telephone: document.getElementById("telephone"),
+          name: document.getElementById("name"),
+          role:checked(),
+        };
+       let requestObj =
+          "email=" +
+          obj.email.value +
+          "&telephone=" +
+          obj.telephone.value +
+          "&name=" +
+          obj.name.value +
+          "&role=" +
+          obj.role;
+
+        let xhr = new XMLHttpRequest();
+        xhr.onload = () => {
+          obj.email.value = "";
+          obj.telephone.value = "";
+          obj.name.value = "";
+         
+          btn.disabled=false
+          snackBar.innerText = ` ${xhr.responseText}`
+          text.style.visibility="visible"
+          snackBar.className="show"
+                btn.classList.remove("loading")
+                setTimeout(()=>{
+                    snackBar.className=snackBar.className.replace("show","")
+
+                },3000)  
+        };
+
+        xhr.open("post", "/admin/add/user", true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(requestObj);
+  }
+
+    </script>
+   
+  </body>
+</html>

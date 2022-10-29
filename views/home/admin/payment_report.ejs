@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/dash_style.css">
+</head>
+
+
+<div class="container">
+    <nav class="navbar">
+        <div class="nav_icon" onclick="toggleSideBar()">
+            <i class="fa fa-bars"></i>
+        </div>
+        <div class="navbar_left">
+
+        </div>
+        <div class="navbar_right">
+            <a href="#">
+                <i class="fa fa-search"></i>
+            </a>
+            <a href="#">
+                <img src="/img/avatar.svg" alt="" width="30">
+            </a>
+
+
+        </div>
+    </nav>
+    <main>
+        <div class="main-container">
+           
+
+   
+            <div class="charts">
+
+                <div class="charts-left">
+                    <div class="chart-left-title">
+                       <canvas id="myChart"></canvas>
+
+
+
+
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <div id="sidebar">
+        <div class="sidebar-title">
+            <div class="sidebar-img">
+                <img src="/img/avatar.svg">
+                <h1>Madam Nnenna</h1>
+            </div>
+            <i class="fa fa-times" id="sidebarIcon" onclick="closesideBar()"></i>
+
+
+        </div><div class="sidebar-menu">
+          <div class="sidebar-link">
+            <i class="fa fa-home"> </i>
+            <a href="/home/dashboard">Dashboard</a>
+          </div>
+
+          <h2>Management</h2>
+          <div class="sidebar-link">
+            <i class="fa fa-wrench"></i>
+            <a href="#">Admin Management</a>
+          </div>
+
+          <div class="sidebar-link ">
+            <i class="fa fa-users"></i>
+            <a href="/admin/list/resident">Resident Management</a>
+          </div>
+          <div class="sidebar-link">
+            <i class="fa fa-bus"></i>
+            <a href="/admin/shuttle/management">Shuttle Bus Management</a>
+          </div>
+          <div class="sidebar-link">
+            <i class="fa fa-money"></i>
+            <a href="/admin/business/management">Business Owner Management</a>
+          </div>
+          <div class="sidebar-link">
+            <i class="fa fa-handshake-o"></i>
+            <a href="/admin/view/users">User Management</a>
+          </div>
+          <div class="sidebar-link">
+            <i class="fa fa-user-plus"></i>
+            <a href="/admin/view/domestic">Domestic Staff Management</a>
+          </div>
+          <div class="sidebar-link">
+            <i class="fa fa-home"></i>
+            <a href="/admin/houses">House Management</a>
+          </div>
+
+          <h2>Payments And Deposit</h2>
+
+          <div class="sidebar-link">
+            <i class="fa fa-money"></i>
+            <a href="/admin/deposit/resident">Deposit Request</a>
+          </div>
+
+          <div class="sidebar-link">
+            <i class="fa fa-money"></i>
+            <a href="/admin/payment/resident/paid">Resident Paid</a>
+          </div>
+
+          <div class="sidebar-link ">
+            <i class="fa fa-money"></i>
+            <a href="/admin/payment/resident/confirmed">Payment Confirmed</a>
+          </div>
+          <div class="sidebar-link">
+            <i class="fa fa-money"></i>
+            <a href="/admin/payment/resident/rejected">Payment Rejected</a>
+          </div>
+
+          <div class="sidebar-link active-menu-link">
+            <i class="fa fa-newspaper-o"></i>
+            <a href="/admin/resident/report">Payment Report</a>
+          </div>
+          <div class="sidebar-link">
+            <i class="fa fa-sign-out"></i>
+            <a href="#">Logout</a>
+          </div>
+        </div>
+
+
+    </div>
+
+</div>
+<script src="/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script>
+    let jan = []
+    let feb = []
+    let march = []
+    let april = []
+    let may = []
+    let june = []
+    let july = []
+    let aug = []
+    let sept = []
+    let oct = []
+    let nov = []
+    let dec = []
+
+
+    let jan_sanitation = []
+    let feb_sanitation = []
+    let march_sanitation = []
+    let april_sanitation = []
+    let may_sanitation = []
+    let june_sanitation = []
+    let july_sanitation = []
+    let aug_sanitation = []
+    let sept_sanitation = []
+    let oct_sanitation = []
+    let nov_sanitation = []
+    let dec_sanitation = []
+
+    let jan_road = []
+    let feb_road = []
+    let march_road = []
+    let april_road = []
+    let may_road = []
+    let june_road = []
+    let july_road = []
+    let aug_road = []
+    let sept_road = []
+    let oct_road = []
+    let nov_road = []
+    let dec_road = []
+
+    let data =<%-JSON.stringify(service) %>
+    let road =<%-JSON.stringify(road) %>
+    let sanitation =<%-JSON.stringify(sanitation) %>
+       
+        for (i = 0; i < data.length ; i++) {
+        if (new Date(data[i].deposit_date ).toLocaleString("default", { month: "long" }) == "January") {
+            jan.push( data[i].amount )
+            console.log(jan)
+        }
+        else if (new Date(data[i].deposit_date ).toLocaleString("default", { month: "long" }) == "February") {
+            feb.push( data[i].amount )
+            console.log(feb)
+        }
+        else if (new Date(data[i].deposit_date ).toLocaleString("default", { month: "long" }) == "March") {
+            march.push( data[i].amount )
+        }
+        else if (new Date(data[i].deposit_date ).toLocaleString("default", { month: "long" }) == "April") {
+            april.push( data.amount )
+        }
+        else if (new Date(data[i].deposit_date ).toLocaleString("default", { month: "long" }) == "May") {
+            may.push( data[i].amount )
+        }
+        else if (new Date(data[i].deposit_date ).toLocaleString("default", { month: "long" }) == "June") {
+            june.push( data[i].amount )
+        }
+        else if (new Date(data[i].deposit_date ).toLocaleString("default", { month: "long" }) == "July") {
+            july.push( data[i].amount )
+        }
+        else if (new Date(data[i].deposit_date ).toLocaleString("default", { month: "long" }) == "August") {
+            aug.push( data[i].amount )
+        }
+        else if (new Date(data[i].deposit_date ).toLocaleString("default", { month: "long" }) == "September") {
+            sept.push( data[i].amount )
+        }
+        else if (new Date(data[i].deposit_date ).toLocaleString("default", { month: "long" }) == "October") {
+            oct.push( data[i].amount )
+        }
+        else if (new Date(data[i].deposit_date ).toLocaleString("default", { month: "long" }) == "November") {
+            nov.push( data[i].amount )
+        }
+        else if (new Date(data[i].deposit_date ).toLocaleString("default", { month: "long" }) == "December") {
+            dec.push( data[i].amount )
+        }
+
+    }
+
+
+     for (i = 0; i < sanitation.length ; i++) {
+        if (new Date(sanitation[i].deposit_date ).toLocaleString("default", { month: "long" }) == "January") {
+            jan_sanitation.push( sanitation[i].amount )
+            console.log(jan)
+        }
+        else if (new Date(sanitation[i].deposit_date ).toLocaleString("default", { month: "long" }) == "February") {
+            feb_sanitation.push( sanitation[i].amount )
+            console.log(feb)
+        }
+        else if (new Date(sanitation[i].deposit_date ).toLocaleString("default", { month: "long" }) == "March") {
+            march_sanitation.push( sanitation[i].amount )
+        }
+        else if (new Date(sanitation[i].deposit_date ).toLocaleString("default", { month: "long" }) == "April") {
+            april_sanitation.push( sanitation.amount )
+        }
+        else if (new Date(sanitation[i].deposit_date ).toLocaleString("default", { month: "long" }) == "May") {
+            may_sanitation.push( sanitation[i].amount )
+        }
+        else if (new Date(sanitation[i].deposit_date ).toLocaleString("default", { month: "long" }) == "June") {
+            june_sanitation.push( sanitation[i].amount )
+        }
+        else if (new Date(sanitation[i].deposit_date ).toLocaleString("default", { month: "long" }) == "July") {
+            july_sanitation.push( sanitation[i].amount )
+        }
+        else if (new Date(sanitation[i].deposit_date ).toLocaleString("default", { month: "long" }) == "August") {
+            aug_sanitation.push( sanitation[i].amount )
+        }
+        else if (new Date(sanitation[i].deposit_date ).toLocaleString("default", { month: "long" }) == "September") {
+            sept_sanitation.push( sanitation[i].amount )
+        }
+        else if (new Date(sanitation[i].deposit_date ).toLocaleString("default", { month: "long" }) == "October") {
+            oct_sanitation.push( sanitation[i].amount )
+        }
+        else if (new Date(sanitation[i].deposit_date ).toLocaleString("default", { month: "long" }) == "November") {
+            nov_sanitation.push( sanitation[i].amount )
+        }
+        else if (new Date(sanitation[i].deposit_date ).toLocaleString("default", { month: "long" }) == "December") {
+            dec_sanitation.push( sanitation[i].amount )
+        }
+
+    }
+     for (i = 0; i < road.length ; i++) {
+        if (new Date(road[i].deposit_date ).toLocaleString("default", { month: "long" }) == "January") {
+            jan_road.push( road[i].amount )
+            console.log(jan)
+        }
+        else if (new Date(road[i].deposit_date ).toLocaleString("default", { month: "long" }) == "February") {
+            feb_road.push( road[i].amount )
+            console.log(feb)
+        }
+        else if (new Date(road[i].deposit_date ).toLocaleString("default", { month: "long" }) == "March") {
+            march_road.push( road[i].amount )
+        }
+        else if (new Date(road[i].deposit_date ).toLocaleString("default", { month: "long" }) == "April") {
+            april_road.push( data.amount )
+        }
+        else if (new Date(road[i].deposit_date ).toLocaleString("default", { month: "long" }) == "May") {
+            may_road.push( data[i].amount )
+        }
+        else if (new Date(road[i].deposit_date ).toLocaleString("default", { month: "long" }) == "June") {
+            june_road.push( road[i].amount )
+        }
+        else if (new Date(road[i].deposit_date ).toLocaleString("default", { month: "long" }) == "July") {
+            july_road.push( road[i].amount )
+        }
+        else if (new Date(road[i].deposit_date ).toLocaleString("default", { month: "long" }) == "August") {
+            aug_road.push( data[i].amount )
+        }
+        else if (new Date(road[i].deposit_date ).toLocaleString("default", { month: "long" }) == "September") {
+            sept_road.push( road[i].amount )
+        }
+        else if (new Date(road[i].deposit_date ).toLocaleString("default", { month: "long" }) == "October") {
+            oct_road.push( data[i].amount )
+        }
+        else if (new Date(road[i].deposit_date ).toLocaleString("default", { month: "long" }) == "November") {
+            nov_road.push( road[i].amount )
+        }
+        else if (new Date(road[i].deposit_date ).toLocaleString("default", { month: "long" }) == "December") {
+            dec_road.push( road[i].amount )
+        }
+
+    }
+    console.log(jan)
+    jan = jan.reduce((a, b) => a + b, 0)
+    feb = feb.reduce((a, b) => a + b, 0)
+    march = march.reduce((a, b) => a + b, 0)
+    april = april.reduce((a, b) => a + b, 0)
+    may = may.reduce((a, b) => a + b, 0)
+    june = june.reduce((a, b) => a + b, 0)
+    july = july.reduce((a, b) => a + b, 0)
+    aug = aug.reduce((a, b) => a + b, 0)
+    sept = sept.reduce((a, b) => a + b, 0)
+    oct = oct.reduce((a, b) => a + b, 0)
+    nov = nov.reduce((a, b) => a + b, 0)
+    dec = dec.reduce((a, b) => a + b, 0)
+
+
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'bar',
+
+        // The data for our dataset
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [{
+                label: 'sanitation Charge Payment Report ',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: [jan, feb, march, april, may, june, july, aug, sept, oct, nov, dec]
+            },{
+               
+            
+                label: 'Road Infrastructure Payment Report ',
+                backgroundColor: 'rgb(255, 99, 0)',
+                borderColor: 'rgb(255, 99, 0)',
+                data: [jan_road, feb_road, march_road, april_road, may_road, june_road, july_road, aug_road, sept_road, oct_road, nov_road, dec_road]
+
+            },
+            {
+               
+            
+                label: 'Sanitation Payment Report ',
+                backgroundColor: 'rgb(255, 0, 0)',
+                borderColor: 'rgb(255, 0, 0)',
+                data: [jan_sanitation, feb_sanitation, march_sanitation, april_sanitation, may_sanitation, june_sanitation, july_sanitation, aug_sanitation, sept_sanitation, oct_sanitation, nov_sanitation, dec_sanitation]
+
+            }
+        
+        
+        
+        ]
+        },
+
+        // Configuration options go here
+        options: {
+
+            responsive:true
+        }
+    });
+    
+</script>
+</script>
+</body>
+
+</html>

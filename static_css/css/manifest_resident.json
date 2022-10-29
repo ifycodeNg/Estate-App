@@ -1,0 +1,37 @@
+{
+    "name":" P.P.E.M.A",
+    "short_name":"resident Portal",
+    "start_url":"/resident/login",
+    "display":"standalone",
+    "background_color":"green",
+    "theme_color":"#000",
+    "orientation":"portrait-primary",
+    "icons":[
+        {
+        "src":"/img/72x72.png",
+        "type":"image/png",
+        "sizes":"72x72"
+        },
+         {
+        "src":"/img/96x196.png",
+        "type":"image/png",
+        "sizes":"96x96"
+        },
+        
+         {
+        "src":"/img/144x144.png",
+        "type":"image/png",
+        "sizes":"144x144"
+        },
+         {
+        "src":"/img/192x192.png",
+        "type":"image/png",
+        "sizes":"192x192"
+        }, {
+        "src":"/img/512x512.png",
+        "type":"image/png",
+        "sizes":"512x512"
+        }
+    ]
+
+}

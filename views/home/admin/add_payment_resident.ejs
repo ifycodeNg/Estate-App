@@ -1,0 +1,220 @@
+<%- include('./partial/header') %>
+       <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+          
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name"></h4>
+                <small id="user_role">Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span> Resident Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Record Payment</h3>
+                               
+                            </div>
+                        
+                        
+ 
+                  </div>
+                <form id="form">
+                    <div class="form-row">
+ <label for="">Resident Name</label>
+                     <select name="" id="residents">
+                         
+                            
+                            
+                        </select>
+                    </div>
+                      <div class="form-row">
+ <label for="">Drive Number</label>
+                    <select id="selected" onchange=clicked() >
+                      <option selected value="">
+                        Select Drive No
+                      </option>
+                            <option value="1">
+                                Drive 1
+                            </option>
+                            <option value="2">
+                                Drive 2
+                            </option>
+                             <option value="3">
+                                Drive 3
+                            </option>
+                             <option value="4">
+                                Drive 4
+                            </option>
+                             <option value="5">
+                                Drive 5
+                            </option>
+                             <option value="6">
+                                Drive 6
+                            </option>
+                        </select>
+                    </div>
+                  <div class="form-row">
+ <label for="">Payee</label>
+                   <input required id="payee" type="text">
+                    </div>
+                    
+                      <div class="form-row">
+ <label for="">Amount</label>
+                   <input required id="amount" type="text">
+                    </div>
+                     <div class="form-row">
+ <label for="">Teller Number</label>
+                   <input id="teller_no" required type="text">
+                    </div>
+                      
+                   <div class="form-row">
+ <label for="">Receipt Issued</label>
+                   <input id="given"   type="checkbox">
+                    </div>
+                     <div class="form-row">
+ <label for="">Teller Image</label>
+                   <input accept="image/*" type="file" id="image"  >
+                    </div>
+                        <button id="btn" onclick="load()">
+                            <span id="text">Record Payment</span>
+                        </button>
+                   
+                </form>
+              </div>
+             
+          </div>
+               <div id="snackbar">
+      
+           </div>
+        </main>
+        
+        
+    </div>
+   
+
+ <script type="text/javascript">
+ window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+      function clicked() {   
+          let select=document.getElementById("selected") 
+          let val= select.value 
+          let xhr = new XMLHttpRequest();
+          let requestObj="driveNo="+val;
+          console.log(xhr.readyState);
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+              console.log(data)
+              add_data(data)
+         };
+
+        xhr.open("get", `/residents/${val}`, true);
+        xhr.send(requestObj); 
+         
+
+      }
+    function add_data(data){
+    let residents=document.getElementById("residents") 
+    residents.innerHTML='' 
+    for (let i = 0; i < data.result.length; i++) {
+      console.log(data.length)
+       let option=document.createElement("option")
+       option.value=`${data.result[i].tenId}`
+       option.text=`${data.result[i].fullname}`
+       residents.append(option)
+    }
+  }
+      function load() {
+        let form=document.getElementById("form")
+        let btn=document.getElementById("btn")
+        let snackBar=document.getElementById("snackbar")
+       let text=document.getElementById("text")
+       form.addEventListener("submit",(e)=>{
+          e.preventDefault()
+        btn.classList.add("loading")
+        btn.disabled=true
+          text.style.visibility="hidden"
+       })
+        let given=document.getElementById(`given`)
+        let val=given.checked
+        value=val?"true":"false"
+        let obj = {
+          resident: document.getElementById("residents"),
+          payee: document.getElementById("payee"),
+          teller_no: document.getElementById("teller_no"),
+          amount: document.getElementById("amount"),
+          image: document.getElementById("image"),
+        };
+           let formData = new FormData()
+            formData.append("resident",obj.resident.value)
+            formData.append("image", obj.image.files[0])
+            formData.append("payee", obj.payee.value)
+            formData.append("given", value)
+            formData.append("amount", obj.amount.value)
+            formData.append("receipt", obj.teller_no.value)
+         let xhr = new XMLHttpRequest();
+          console.log(xhr.readyState);
+
+         xhr.onload = () => {
+           btn.disabled=false
+                snackBar.innerText = ` ${xhr.responseText}`
+
+                snackBar.className="show"
+                  text.style.visibility="visible"
+                btn.classList.remove("loading")
+                setTimeout(()=>{
+                    snackBar.className=snackBar.className.replace("show","")
+
+                },3000)  
+          obj.select.value = "";
+          obj.payee.value = "";
+          obj.teller_no.value = "";
+          obj.resident.value = "";
+          obj.image.value = "";
+          obj.amount.value = "";
+          text.style.visibility="visible"
+          console.log(xhr.responseText);
+        };
+
+        xhr.open("post", "/resident/make/payment", true);
+       
+        xhr.send(formData);
+      }
+    </script>
+  </body>
+</html>

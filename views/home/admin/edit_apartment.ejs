@@ -1,0 +1,174 @@
+<%- include('./partial/header') %>
+ <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+           
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+      <div class="breadcrumb">
+<span> Apartment Management </span>
+<span>All Apartment Residence</span>
+<span id="current">Edit Apartment</span>
+
+                    </div>
+            <div>
+               <span class="exit" onclick=back()><i class="las la-long-arrow-alt-left"></i></span>
+            </div >       
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Edit Apartment</h3>
+                               
+                            </div>
+                        
+                        
+ 
+                  </div>
+                <form id="form">
+                    <div class="form-row">
+ <label for="">House Number</label>
+                   <input id="houseNo" value="<%=body[0].houseNo%>"  type="text">
+                    </div>
+                  <div class="form-row">
+ <label for="">House Type</label>
+                   <input id="houseType" value="<%=body[0].houseType%>"  type="text">
+                    </div>
+                      <div class="form-row">
+ <label for="">Drive Number</label>
+                  <select required name="" id="driveNo">
+                      <option selected disabled value="<%=body[0].driveNo%>">
+                          Drive    <%=body[0].driveNo%>
+                            </option>
+                         <option value="1">
+                                Drive 1
+                            </option>
+                            <option value="2">
+                                Drive 2
+                            </option>
+                             <option value="3">
+                                Drive 3
+                            </option>
+                             <option value="4">
+                                Drive 4
+                            </option>
+                             <option value="5">
+                                Drive 5
+                            </option>
+                             <option value="6">
+                                Drive 6
+                            </option>
+                  </select>
+                    </div>
+                     
+                 
+                            <button onclick="load() " id="submit">
+                                 <span id="text">Edit Apartment</span>
+                        </button>
+               
+                </form>
+              </div>
+             
+          </div>
+                <div id="snackbar">
+      
+           </div>
+        </main>
+        
+        
+    </div>
+   
+    </div>
+      
+    <script>
+      function back() {
+        history.back(-1)
+      }
+      window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+      function load() {
+           let snackBar=document.getElementById("snackbar")
+        let btn = document.getElementById("submit");
+        let form=document.getElementById("form")
+        let text=document.getElementById("text")
+        form.addEventListener("submit",(e)=>{
+          e.preventDefault()
+        btn.classList.add("loading")
+        btn.disabled=true
+        text.style.visibility="hidden"
+   })
+      
+        let obj = {
+          houseNo: document.getElementById("houseNo"),
+          driveNo: document.getElementById("driveNo"),
+          houseType: document.getElementById("houseType"),
+        };
+
+        let requestObj =
+          "houseNo=" +
+          obj.houseNo.value +
+          "&houseType=" +
+          obj.houseType.value +
+          "&driveNo=" +
+          obj.driveNo.value;
+
+        let xhr = new XMLHttpRequest();
+        xhr.onload = () => {
+          btn.disabled=false
+          snackBar.innerText =` ${xhr.responseText}`
+          console.log(xhr.responseText);
+          snackBar.className="show"
+          text.style.visibility="visible"
+                btn.classList.remove("loading")
+                setTimeout(()=>{
+                    snackBar.className=snackBar.className.replace("show","")
+
+                },3000)  
+      
+        };
+
+        xhr.open("post", "/admin/update/house/<%=body[0].id%>", true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(requestObj);
+      }
+    </script>
+  
+
+
+  </body>
+</html>

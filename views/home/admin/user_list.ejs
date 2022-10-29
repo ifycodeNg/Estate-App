@@ -1,0 +1,243 @@
+<%- include('./partial/header') %>
+  <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role">Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+ <div class="breadcrumb">
+<span> User Management </span>
+<span id="current"></span>
+
+                    </div>
+                    
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>All Users</h3>
+                               
+                            </div>
+                        
+                
+                      
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%" id="user_table">
+                                <thead>
+                                    <tr>
+                                        <td>S/N</td>
+                                <td>
+                                       Profile Pic
+                                        
+                                    </td>
+                                <td>
+                                      Fullname
+                                        
+                                    </td>
+                               
+                                    <td>
+                                       Telephone
+                                        
+                                    </td>
+                                     <td>
+                                       Username
+                                        
+                                    </td>
+                                    <td>
+                                       Role
+                                        
+                                    </td>
+                                 <td>
+                                       Status
+                                        
+                                    </td>
+                                     <td>
+                                       Action
+                                        
+                                    </td></tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+  
+    <script>
+      window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+      function load() {
+  
+     let xhr = new XMLHttpRequest();
+        console.log(xhr.readyState);
+        xhr.onload = () => {
+    
+            let data=JSON.parse(xhr.responseText)
+            console.log(data)
+            add_data(data)
+ };
+
+        xhr.open("get", `/admin/users`, true);
+        xhr.send();
+      }
+      load()
+function add_data(data){
+let table=document.getElementById("user_table")  
+for (let i = 0; i < data.result.length; i++) {
+let tr=document.createElement("tr")
+if(data.result[i].status=="Active"){
+  if(data.result[i].image){
+ tr.innerHTML=
+ `<td>${i+1}</td>`+
+  `<td><img src="/upload/${data.result[i].image}" height="50" width="50" style="object-fit:cover;border-radius:50%;" alt="Avatar"></td>`+
+ `<td>`+data.result[i].fullname +`</td>`+
+ `<td>${data.result[i].telephone  }</td>`+
+  `<td>${data.result[i].username} </td>`+
+ `<td>${data.result[i].role}</td>`+
+ `<td>`+
+  `<span style="display:flex">`+
+      `<span class="status green"></span>`+ data.result[i].status
+    +`</span>`
+      +` </td>`+
+  
+  `<td class="btn_resident">`+
+    ` <button><a href="/admin/delete/user/${data.result[i].userId}"><span>
+             Delete
+               </span></a></button>`+
+                                              
+              ` <button><a href="/admin/update/${data.result[i].userId}"><span>
+               Edit
+          </span></a></button>`+
+   ` </td>`
+    
+    table.append(tr) 
+}
+ if(!data.result[i].image){
+ tr.innerHTML=
+ `<td>${i+1}</td>`+
+  `<td><img src="/img/avatar.svg" height="50" width="50" style="object-fit:cover;border-radius:50%;" alt="Avatar"></td>`+
+ `<td>`+data.result[i].fullname +`</td>`+
+ `<td>${data.result[i].telephone  }</td>`+
+  `<td>${data.result[i].username} </td>`+
+ `<td>${data.result[i].role}</td>`+
+ `<td>`+
+  `<span style="display:flex">`+
+      `<span class="status green"></span>`+ data.result[i].status
+    +`</span>`
+      +` </td>`+
+  
+  `<td class="btn_resident">`+
+    ` <button><a href="/admin/delete/user/${data.result[i].userId}"><span>
+             Delete
+               </span></a></button>`+
+                                              
+              ` <button><a href="/admin/update/${data.result[i].userId}"><span>
+               Edit
+          </span></a></button>`+
+   ` </td>`
+    
+    table.append(tr) 
+}
+}
+else{
+     if(data.result[i].image){
+tr.innerHTML=
+ `<td>${i+1}</td>`+
+     `<td><img src="/upload/${data.result[i].image}" height="50" width="50" style="object-fit:cover;border-radius:50%;" alt="Avatar"></td>`+
+ `<td>`+data.result[i].fullname +`</td>`+
+ `<td>${data.result[i].telephone  }</td>`+
+  `<td>${data.result[i].username} </td>`+
+ `<td>${data.result[i].role}</td>`+
+ `<td>`+
+  `<span style="display:flex;">`+
+      `<span class="status red"></span>`+ data.result[i].status
+     + `</span>`
+  +` </td>`+
+  `<td class="btn_resident">`+
+   ` <button><a href="/admin/delete/user/${data.result[i].userId}"><span>
+             Delete
+               </span></a></button>`+
+                                              
+              ` <button><a href="/admin/update/${data.result[i].userId}"><span>
+               Edit
+          </span></a></button>`+
+   ` </td>`
+    
+    table.append(tr) 
+
+}
+ else if(!data.result[i].image){
+tr.innerHTML=
+ `<td>${i+1}</td>`+
+     `<td><img src="/img/avatar.svg" height="50" width="50" style="object-fit:cover;border-radius:50%;" alt="Avatar"></td>`+
+ `<td>`+data.result[i].fullname +`</td>`+
+ `<td>${data.result[i].telephone  }</td>`+
+  `<td>${data.result[i].username} </td>`+
+ `<td>${data.result[i].role}</td>`+
+ `<td>`+
+  `<span style="display:flex;">`+
+      `<span class="status red"></span>`+ data.result[i].status
+     + `</span>`
+  +` </td>`+
+  `<td class="btn_resident">`+
+   ` <button><a href="/admin/delete/user/${data.result[i].userId}"><span>
+             Delete
+               </span></a></button>`+
+                                              
+              ` <button><a href="/admin/update/${data.result[i].userId}"><span>
+               Edit
+          </span></a></button>`+
+   ` </td>`
+    
+    table.append(tr) 
+
+}
+}
+}
+}
+  
+    </script>
+  </body>
+</html>

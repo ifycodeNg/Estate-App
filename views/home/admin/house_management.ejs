@@ -1,0 +1,234 @@
+<%- include('./partial/header') %>
+      <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+            <div class="search-wrapper">
+                <span class="las la-search">
+                 </span>
+                    <input type="search" name="" placeholder="Search Here" id="">
+                
+            </div>
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span>Apartment Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>All Apartment Residence</h3>
+                           
+                            </div>
+                        
+                        
+                   <div>
+  <span>Sort By Drive Number</span>
+                        <select name=""  onchange=clicked() id="selected">
+                            <option disabled selected>
+                                Drive No
+                            </option>
+                            <option value="1">
+                                Drive 1
+                            </option>
+                            <option value="2">
+                                Drive 2
+                            </option>
+                             <option value="3">
+                                Drive 3
+                            </option>
+                             <option value="4">
+                                Drive 4
+                            </option>
+                             <option value="5">
+                                Drive 5
+                            </option>
+                             <option value="6">
+                                Drive 6
+                            </option>
+                        </select>
+                   </div>
+                      
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%" id="apartments">
+                                <thead>
+                                    <tr>
+                                        <td>S/N</td>
+                                <td>
+                                      House Type
+                                        
+                                    </td>
+                                
+                                <td>
+                                       Amount
+                                        
+                                    </td>
+                                    <td>
+                                       House No
+                                        
+                                    </td>
+                                    <td>
+                                       Drive No
+                                        
+                                    </td>
+                                 <td>
+                                       Status
+                                        
+                                    </td>
+                                 <td>
+                                       Action
+                                        
+                                    </td></tr>
+                                </thead>
+                                <tbody>
+                          
+                                   
+                                             </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+   
+    </div>
+  </body>
+  <script>
+      window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+      function clicked() {   
+          let select=document.getElementById("selected") 
+          let table=document.getElementById("apartments")
+          let val= select.value 
+         let xhr = new XMLHttpRequest();
+          let requestObj="driveNo="+val;
+          console.log(xhr.readyState);
+          xhr.onload = () => {
+            let count=1
+            let rowCount=table.rows.length         
+           
+              let data=JSON.parse(xhr.responseText)
+                       for(let i=count;i<rowCount;i++){
+              table.deleteRow(count)
+                    }
+              add_data(data)
+
+         };
+        xhr.open("get", `/apartment/drives/${val}`, true);
+        xhr.send(requestObj);
+        }
+         function load() {
+        let xhr = new XMLHttpRequest();
+ 
+        xhr.onload = () => {
+            let data=JSON.parse(xhr.responseText)
+            
+            add_data(data)
+ };
+
+        xhr.open("get", `/admin/houses`, true);
+        xhr.send();
+      }
+      load()
+function add_data(data){
+
+let table=document.getElementById("apartments")  
+for (let i = 0; i < data.length; i++) {
+let tr=document.createElement("tr")
+if(data[i].status=="Active"){
+  console.log("done")
+ tr.innerHTML=
+ `<td>${i+1}</td>`+
+ `<td>`+data[i].houseType +`</td>`+
+ `<td>${data[i].amount  }</td>`+
+  `<td>${data[i].houseNo} </td>`+
+ `<td>${data[i].driveNo}</td>`+
+ `<td>`+
+      `<span class="status green"></span>`+ "Occupied"
+  +` </td>`+
+  `<td class="btn_resident">`+
+    ` <button><a href="/apartment/delete/${data[i].id}"><span>
+             Delete
+               </span></a></button>`+
+                                              
+              ` <button><a href="/apartment/edit/${data[i].id}"><span>
+               Edit
+          </span></a></button>`+
+   ` </td>`
+    
+    table.append(tr) 
+}
+else{
+  
+tr.innerHTML=
+ `<td>${i+1}</td>`+
+ `<td>`+data[i].houseType +`</td>`+
+ `<td>${data[i].amount  }</td>`+
+  `<td>${data[i].houseNo} </td>`+
+ `<td>${data[i].driveNo}</td>`+
+ `<td>`+
+      `<span class="status red"></span>`+ "UnOccupied"
+  +` </td>`+
+  `<td class="btn_resident">`+
+    ` <button><a href="/apartment/delete/${data[i].id}"><span>
+             Delete
+               </span></a></button>`+
+                                              
+              ` <button><a href="/apartment/edit/${data[i].id}"><span>
+               Edit
+          </span></a></button>`+
+   ` </td>`
+    
+    table.append(tr)
+    
+ 
+
+}
+
+ 
+ }
+  
+ }
+  </script>
+</html>

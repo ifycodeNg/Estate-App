@@ -1,0 +1,53 @@
+<%- include('./partial/header'); %>
+<div class=" ">
+ 
+      <p class="text-center m-8 font-bold">
+         All Recorded Payments
+       </p>
+         <a
+        href="/resident/make/deposit"
+        class="md:w-full bg-gray-900 text-white font-bold py-2 px-4  rounded"
+      >
+       Record Payment</a
+      >
+        </div>
+
+
+
+    
+   <div class="overflow-x-auto">
+     
+        <table class=" mt-5 shadow-lg bg-white">
+        <tr>
+          <th class="bg-blue-100 border text-left px-4 py-2">S/N</th>
+
+          <th class="bg-blue-100 border text-left px-8 py-4">Payee</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">Amount</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">
+           Teller No
+          </th>
+           <th class="bg-blue-100 border text-left px-8 py-4">
+            Ref No 
+          </th>
+          <th class="bg-blue-100 border text-left px-8 py-4">Date Payed</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">Status</th>
+         
+        </tr>
+
+        <% if (body){%> <% for (let i=0; i < body.length; i++){%>
+        <tr>
+          <td class="border px-8 py-4"><%=(i +1)%></td>
+
+          <td class="border px-4 py-2"><%=body[i].payee%></td>
+          <td class="border px-8 py-4"><%=body[i].amount%></td>
+          <td class="border px-8 py-4"><%=body[i].receipt%></td>
+           <td class="border px-8 py-4"><%=body[i].receipt_no%></td>
+          <td class="border px-8 py-4"><%=body[i].deposit_date%></td>
+          <td class="border px-8 py-4"><%=body[i].status%></td>
+         </tr>
+        <% } %> <% } %>
+      </table>
+   </div>
+    </main>
+  </body>
+</html>

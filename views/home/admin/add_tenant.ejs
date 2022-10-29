@@ -1,0 +1,201 @@
+<%- include('./partial/header'); %>
+ <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+            
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Super Admin</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span> Resident Management </span>
+<span id="current">All Resident</span>
+
+                    </div>
+       
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Add A Resident</h3>
+                               
+                            </div>
+                        
+                        
+ 
+                  </div>
+                <form id="form">
+                    <div class="form-row">
+ <label for="">Fullname</label>
+                   <input id="name" required type="text">
+                    </div>
+                  <div class="form-row">
+ <label for="">Telephone</label>
+                   <input id="telephone" required type="text">
+                    </div>
+                      <div class="form-row">
+ <label for="">Drive Number</label>
+                  <select onchange="clicked()"  required name="" id="driveNo">
+                       <option disabled selected value="">
+                                Select Drive No
+                            </option>
+                         <option value="1">
+                                Drive 1
+                            </option>
+                            <option value="2">
+                                Drive 2
+                            </option>
+                             <option value="3">
+                                Drive 3
+                            </option>
+                             <option value="4">
+                                Drive 4
+                            </option>
+                             <option value="5">
+                                Drive 5
+                            </option>
+                             <option value="6">
+                                Drive 6
+                            </option>
+                  </select>
+                    </div>
+                      <div class="form-row">
+ <label for="">House Number</label>
+                   <select  required name="" id="houseNo">
+                    
+                  </select>
+                    </div>
+                    
+                 
+                        <button id="submit" onclick="load() ">
+                            <span class="text">Create</span>
+                        </button>
+                   
+                </form>
+              </div>
+             
+          </div>
+             <div id="snackbar">
+      
+           </div>
+        </main>
+        
+        
+    </div>
+   
+    </div>
+      
+</body>
+    <script>
+      window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+         function clicked() {
+          let select=document.getElementById("driveNo") 
+          let val= select.value 
+          let xhr = new XMLHttpRequest();
+          let requestObj="driveNo="+val;
+          console.log(xhr.readyState);
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)  
+              add_data(data)
+         };
+
+        xhr.open("get", `/apartments/${val}`, true);
+        xhr.send(requestObj); 
+
+      }
+    function add_data(data){
+//       let user_name=document.getElementById("user_name")   
+// let user_role=document.getElementById("user_role")
+// user_name.textContent=data.profile[0].fullname
+// user_role.textContent=data.profile[0].role
+    let residents=document.getElementById("houseNo") 
+    residents.innerHTML='' 
+    for (let i = 0; i < data.length; i++) {
+       let option=document.createElement("option")
+       option.innerHTML=`<option value="${data[i].houseNo}">${data[i].houseNo}</option>`
+       residents.append(option)
+    }
+  }
+      function load() {  
+        let snackBar=document.getElementById("snackbar")
+        let btn = document.getElementById("submit");
+        let form=document.getElementById("form")
+        let text=document.getElementById("text")
+        form.addEventListener("submit",(e)=>{
+          e.preventDefault()
+        btn.classList.add("loading")
+        btn.disabled=true
+         text.style.visibility="hidden"
+          let obj = {
+          telephone: document.getElementById("telephone"),
+          name: document.getElementById("name"),
+          houseNo: document.getElementById("houseNo"),
+          driveNo: document.getElementById("driveNo"),
+          
+        };
+        let xhr = new XMLHttpRequest()
+       xhr.onload = () => {
+                obj.name.value = "";
+                obj.telephone.value = "";
+                obj.houseNo.value = "";
+                obj.driveNo.value = "";
+                btn.disabled=false
+                snackBar.innerText = ` ${xhr.responseText}`
+              text.style.visibility="visible"
+                snackBar.className="show"
+                btn.classList.remove("loading")
+                setTimeout(()=>{
+                    snackBar.className=snackBar.className.replace("show","")
+
+                },3000)  
+                
+                console.log(xhr.responseText)
+            
+       }  
+            console.log(xhr.readyState)
+              let requestObj = "name=" + obj.name.value + "&telephone=" + obj.telephone.value   + "&driveNo=" + obj.driveNo.value + "&houseNo=" + obj.houseNo.value
+
+            xhr.open("post", "/tenant/register/", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send(
+                requestObj
+            )
+     
+   })
+
+       
+      }
+    </script>
+
+</html>

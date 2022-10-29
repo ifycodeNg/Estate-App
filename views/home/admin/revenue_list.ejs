@@ -1,0 +1,326 @@
+<%- include('./partial/header'); %>
+   
+        <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+            <div class="search-wrapper">
+                <span class="las la-search">
+                 </span>
+                    <input type="search" name="" placeholder="Search By Ref N0" id="">
+                
+            </div>
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span>Revenue  Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                          <button><a href="/revenue/payment/download">Export to CSV</a></button>
+                            <div>
+                                <h3>All Payment Recieved</h3>
+                               
+                            </div>
+                        
+ 
+                    <div>
+  <span>Sort By Payment Type</span>
+                        <select id="selected" onchange=clicked()>
+                             <option selected disabled value="">
+                                Type
+                            </option>
+                         <option value="School Charges">
+                               School Charges
+                            </option>
+                            <option value="House Re-design / Restructuring">
+                                House Re-design / Restructuring
+                            </option>
+                        
+                          <option value="Car Stickers">
+                                Car Stickers
+                            </option>
+                            <option value="House Id Stickers">
+                                House Id Stickers
+                            </option>
+                            <option value="Domestic Staff Id">
+                                Domestic Staff Id
+                            </option>
+                             <option value="Renting Of Sporting Facility">
+                                Renting Of Sporting Facility
+                            </option>
+                                                         <option value="Billboards Advertising Levy">
+                                Billboards Advertising Levy
+                            </option>
+                                                         <option value="Big Trucks Access Road Levy">
+                                Big Trucks Access Road Levy
+                            </option>
+                                                         <option value="Telcos Mast / Base Station">
+                                Telcos Mast / Base Station
+                            </option>
+                            
+                                    <option value="Health Facility Charge">
+                                Health Facility Charge
+                            </option>
+                            
+                        </select>
+                   </div>          
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%" id="revenue_list">
+                                <thead>
+                                    <tr>
+                                      <td>S/N</td>
+                                <td>
+                                        Name Of Operator
+                                        
+                                    </td>
+                                <td>
+                                        Telephone No
+                                        
+                                    </td>
+                               
+                                    <td>
+                                       Type Of Payment
+                                        
+                                    </td>
+                                     <td>
+                                       Amount Paid
+                                        
+                                    </td>
+                                      <td>
+                                       Image
+                                        
+                                    </td>
+                                     <td>
+                                   Teller No
+                                        
+                                    </td>
+                                     <td>
+                                       Receipt Given
+                                        
+                                    </td>
+                                        <td>
+                                      Date 
+                                        
+                                    </td>
+                                    <td>
+                                      Ref N0
+                                        
+                                    </td>
+                                     <td>
+                                     Collected By
+                                        
+                                    </td>
+                                      <td>
+                                   Outstanding
+                                        
+                                    </td>
+                                 <td>
+                                       Status
+                                        
+                                    </td>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                       
+                                    
+                                     
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+   
+  
+    
+    <script>
+window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+function clicked() {
+   let select=document.getElementById("selected") 
+          let table=document.getElementById("revenue_list")
+          let val= select.value 
+         let xhr = new XMLHttpRequest();
+          xhr.onload = () => {
+            let count=1
+            let rowCount=table.rows.length         
+              let data=JSON.parse(xhr.responseText)
+                       for(let i=count;i<rowCount;i++){
+              table.deleteRow(count)
+                    }
+              add_data(data)
+
+         };
+             let formData = new FormData()
+             formData.append("type", val)
+        xhr.open("post", "/revenue/type", true);
+        xhr.send(formData);
+}
+
+function load_data() {
+   let xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+    let data=JSON.parse(xhr.responseText)
+    console.log(data)
+    add_data(data)
+ };
+    xhr.open("get", `/admin/revenue/payment`, true);
+    xhr.send();
+
+}
+load_data()
+function add_data(data){
+  if(data.profile){
+let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+user_name.textContent=data.profile[0].fullname
+user_role.textContent=data.profile[0].role
+  }
+let table=document.getElementById("revenue_list")  
+
+for (let i = 0; i < data.length; i++) {
+let tr=document.createElement("tr")
+ let receipt_given= data[i].receipt_given? "false":"true"
+if(JSON.parse(data[i].receipt_given)){
+  if(JSON.parse(data[i].outstanding)>0){
+
+tr.innerHTML=
+ `<td>${i+1}</td>`+
+ `<td>`+data[i].fullname +`</td>`+
+ `<td>${data[i].telephone  }</td>`+
+  `<td>${data[i].type_payment} </td>`+
+ `<td>${data[i].amount_paid}</td>`+
+ `<td>${data[i].image}</td>`+
+ `<td>${data[i].receipt}</td>`+
+ `<td><input type="checkbox" checked  name="" id="given${i+1}"></td>`+
+ `<td>${data[i].date_recieved}</td>`+
+  `<td>${data[i].receipt_no} </td>`+
+   `<td>`+data[i].collected_by +`</td>`+
+    `<td>`+data[i].outstanding +`</td>`+
+ `<td>`+
+     `<span style="display:flex;">`+
+      `<span class="status red"></span>`+"InCompleted" +
+      `</span>`
+  +` </td>`
+    table.append(tr) 
+  }
+else if(JSON.parse(data[i].outstanding)==0 || JSON.parse(data[i].outstanding)<0 )
+{
+tr.innerHTML=
+`<td>`+data[i].fullname +`</td>`+
+ `<td>${data[i].telephone  }</td>`+
+  `<td>${data[i].type_payment} </td>`+
+ `<td>${data[i].amount_paid}</td>`+
+ `<td>${data[i].image}</td>`+
+`<td>${data[i].receipt}</td>`+
+ `<td><input type="checkbox" checked name="" id="given${i+1}"></td>`+
+ `<td>${data[i].date_recieved}</td>`+
+  `<td>${data[i].receipt_no} </td>`+
+   `<td>`+data[i].collected_by +`</td>`+
+    `<td>`+data[i].outstanding +`</td>`+
+ `<td>`+
+     `<span style="display:flex;">`+
+      `<span class="status green"></span>`+ "Complete" +
+      `</span>`
+  +` </td>`
+    table.append(tr) 
+ 
+}
+}
+else {
+  if(JSON.parse(data[i].outstanding)>0){
+
+  console.log("false")
+tr.innerHTML=
+`<td>`+data[i].fullname +`</td>`+
+ `<td>${data[i].telephone  }</td>`+
+  `<td>${data[i].type_payment} </td>`+
+ `<td>${data[i].amount_paid}</td>`+
+ `<td>${data[i].image}</td>`+
+`<td>${data[i].receipt}</td>`+
+ `<td><input type="checkbox"  name="" id="given${i+1}"></td>`+
+ `<td>${data[i].date_recieved}</td>`+
+  `<td>${data[i].receipt_no} </td>`+
+   `<td>`+data[i].collected_by +`</td>`+
+    `<td>`+data[i].outstanding +`</td>`+
+ `<td>`+
+     `<span style="display:flex;">`+
+      `<span class="status green"></span>`+ "InCompleted" +
+      `</span>`
+  +` </td>`
+    table.append(tr) 
+ 
+}
+ if(JSON.parse(data[i].outstanding)<0 || JSON.parse(data[i].outstanding)==0 ){
+  console.log("false")
+tr.innerHTML=
+ `<td>`+data[i].fullname +`</td>`+
+ `<td>${data[i].telephone  }</td>`+
+  `<td>${data[i].type_payment} </td>`+
+ `<td>${data[i].amount_paid}</td>`+
+ `<td>${data[i].image}</td>`+
+`<td>${data[i].receipt}</td>`+
+ `<td><input type="checkbox"  name="" id="given${i+1}"></td>`+
+ `<td>${data[i].date_recieved}</td>`+
+  `<td>${data[i].receipt_no} </td>`+
+   `<td>`+data[i].collected_by +`</td>`+
+    `<td>`+data[i].outstanding +`</td>`+
+ `<td>`+
+     `<span style="display:flex;">`+
+      `<span class="status green"></span>`+ "Completed" +
+      `</span>`
+  +` </td>`
+    table.append(tr) 
+ 
+ }
+}
+ }
+  
+ }
+    </script>
+  </body>
+</html>

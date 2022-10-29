@@ -1,0 +1,170 @@
+<%- include('./partial/header'); %>
+   
+        <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+            <div class="search-wrapper">
+                <span class="las la-search">
+                 </span>
+                    <input type="search" name="" placeholder="Search By Ref N0" id="">
+                
+            </div>
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4>John Doe</h4>
+                <small> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span>Revenue  Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>All Payment Recieved</h3>
+                                <button><a href="/index.html">Export to CSV</a></button>
+                            </div>
+                        
+
+                      
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%" id="revenue_list">
+                                <thead>
+                                    <tr>
+                                      <td>S/N</td>
+                                <td>
+                                        Name Of Operator
+                                        
+                                    </td>
+                                <td>
+                                        Telephone No
+                                        
+                                    </td>
+                               
+                                    <td>
+                                       Type Of Payment
+                                        
+                                    </td>
+                                     <td>
+                                       Amount Paid
+                                        
+                                    </td>
+                                      <td>
+                                       Image
+                                        
+                                    </td>
+                                     <td>
+                                   Teller No
+                                        
+                                    </td>
+                                     <td>
+                                       Receipt Given
+                                        
+                                    </td>
+                                        <td>
+                                      Date 
+                                        
+                                    </td>
+                                    <td>
+                                      Ref N0
+                                        
+                                    </td>
+                                     <td>
+                                     Collected By
+                                        
+                                    </td>
+                                   
+                                 <td>
+                                       Status
+                                        
+                                    </td>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                       
+                                    
+                                     
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+   
+  
+    
+    <script>
+        function load_data() {
+   let xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+    let data=JSON.parse(xhr.responseText)
+    console.log(data)
+    add_data(data)
+ };
+    xhr.open("get", `/admin/revenue/paid`, true);
+    xhr.send();
+
+}
+load_data()
+function add_data(data){
+let table=document.getElementById("revenue_list")  
+
+for (let i = 0; i < data.length; i++) {
+let tr=document.createElement("tr")
+ let receipt_given= data[i].receipt_given? "false":"true"
+if(JSON.parse(data[i].receipt_given)){
+ 
+tr.innerHTML=
+ `<td>${i+1}</td>`+
+ `<td>`+data[i].fullname +`</td>`+
+ `<td>${data[i].telephone  }</td>`+
+  `<td>${data[i].type_payment} </td>`+
+ `<td>${data[i].amount_paid}</td>`+
+ `<td>${data[i].image}</td>`+
+ `<td>${data[i].receipt}</td>`+
+ `<td><input type="checkbox" checked  name="" id="given${i+1}"></td>`+
+ `<td>${data[i].date_recieved}</td>`+
+  `<td>${data[i].receipt_no} </td>`+
+   `<td>`+data[i].collected_by +`</td>`+
+
+ `<td>`+
+     `<span style="display:flex;">`+
+      `<span class="status green"></span>`+"Completed" +
+      `</span>`
+  +` </td>`
+    table.append(tr) 
+  }
+
+}
+ }
+  
+ 
+    </script>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "name": "nnenna",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "tailwind:css": "tailwindcss build public/tailwind.css -o static_css/css/tailwind.css"
+  },
+  "author": "ifycode",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^10.1.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
+    "connect-redis": "^5.2.0",
+    "cookie-parser": "^1.4.5",
+    "csvtojson": "^2.0.10",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "express-session": "^1.17.1",
+    "fast-csv": "^4.3.6",
+    "json2csv": "^5.0.6",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.6",
+    "postcss-cli": "^8.3.0",
+    "qrcode": "^1.5.1",
+    "redis": "^3.1.2",
+    "socket.io": "^3.1.0",
+    "tailwindcss": "^2.0.2",
+    "uuid": "^8.3.2"
+  },
+  "peerDependencies": {
+    "postcss": "^8.0.0"
+  },
+  "devDependencies": {
+    "postcss": "^8.2.1"
+  }
+}

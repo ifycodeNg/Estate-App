@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/dash_style.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav_icon" onclick="toggleSideBar()">
+                <i class="fa fa-bars"></i>
+            </div>
+            <div class="navbar_left">
+                <a href="#">Number Of Resident</a>
+                <a href="#">Number Of Users</a>
+                <a href="#" class="active_link">Admin</a>
+            </div>
+            <div class="navbar_right">
+                <a href="/admin/view/notification">
+                    <i class="fa fa-bell"></i>
+                </a>
+                <a href="#">
+                    <img src="/img/avatar.svg" alt="" width="30">
+                </a>
+
+
+            </div>
+        </nav>
+        <main>
+            <div class="main-container">
+                <div class="main-title">
+                    <img src="/img/bg.svg" alt="">
+                    <div class="main_greeting">
+                        <h1 id="time_greeting">
+                            Good Afternoon Madam Nnenna
+                        </h1>
+                        <p>Welcome to your Dashboard</p>
+                    </div>
+
+                </div>
+
+                <div class="main-cards">
+                    <div class="card">
+                        <i class="fa fa-user-o fa-2x text-lightblue"></i>
+                        <div class="card-inner">
+                            <p class="text-primary"> Number Of Active Residents</p>
+                            <span class="font-bold text-title">14</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <i class="fa fa-user-o fa-2x text-red"></i>
+                        <div class="card-inner">
+                            <p class="text-primary"> Number Of Inactive Residents</p>
+                            <span class="font-bold text-title">5</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <i class="fa fa-user-o fa-2x text-yellow"></i>
+                        <div class="card-inner">
+                            <p class="text-primary"> Number Of Users</p>
+                            <span class="font-bold text-title">14</span>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="charts">
+                    <a href="/admin/add/tenant" class="btn_add">Add New Resident</a>
+                    <div class="charts-left">
+                        <div class="chart-left-title">
+                            <div>
+
+                                <h1 class="head" style="
+    text-align: center; font-weight:bold;">
+                                    All Resident List
+                                </h1>
+
+                                <section class="recent">
+                                    <div class="activity-grid">
+                                        <div class="activity-card">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>S/N</th>
+                                                        <th>Resident Name</th>
+                                                        <th>Telephone Number</th>
+                                                        <th>Payee</th>
+                                                        <th>Amount</th>
+                                                        <th>Image</th>
+                                                       
+                                                        <th>deposit_date</th>
+                                                        <th>receipt</th>
+                                                         <th>Status</th>
+                                                      
+                                                        <th>Action</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+
+                                                    <% if (body){%>
+                                                        <% for (let i=0; i < body.length; i++){%>
+                                                            <tr>
+                                                                <td>
+                                                                    <%=(i +1)%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=body[i].username%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=body[i].telephone%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=body[i].payee%>
+                                                                </td>
+
+                                                                <td>
+                                                                    <%=body[i].amount%>
+                                                                </td>
+                                                                <td>
+                                                                    <a href="/upload/<%=body[i].image%>" ><%=body[i].image%></a>
+                                                                    
+                                                                    
+                                                                </td>
+                                                                <td>
+                                                                    <%=body[i].deposit_date%>
+                                                                </td>
+
+                                                                <td><span class="badge success"><%=body[i].receipt%></span></td>
+                                                            <td><span class="badge success"><%=body[i].status%></span></td>
+                                                                <td>
+
+                                                                    <% if (body[i].status=="pending" ){%>
+                                                                       <a href="#" onclick="load(<%=body[i].id%>,'Confirmed')"
+                                                                        class="badge warning" >Confirm Payment</a>
+                                                                    <br>
+                                                                    <a href="#" onclick="load(<%=body[i].id%>,'Rejected')"
+                                                                        class="badge success">Reject Payment</a>
+                                                                </td>
+                                                                        <% } %>
+                                                                            <% if (body[i].status=="Confirmed" ){%>
+                                                                              <a href="#" onclick="load(<%=body[i].id%>,'Rejected')"
+                                                                        class="badge warning">Reject Payment</a>
+                                                                 
+                                                                    
+                                                                </td>
+                                                                                <% } %>
+                                                                                 <% if (body[i].status=="Rejected" ){%>
+                                                                              <a href="#" onclick="load(<%=body[i].id%>,'Confirmed')"
+                                                                        class="badge warning">Confirm Payment</a>
+                                                                 
+                                                                    
+                                                                </td>
+                                                                                <% } %>
+
+                                                                </td>
+                                                              
+
+
+                                                            </tr>
+                                                            <% } %>
+                                                                <% } %>
+
+
+
+
+
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+  <div id="matchList"></div>
+                                </section>
+                            </div>
+
+
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </main>
+        <div id="sidebar">
+            <div class="sidebar-title">
+                <div class="sidebar-img">
+                    <img src="/img/avatar.svg">
+                    <h1>Madam Nnenna</h1>
+                </div>
+                <i class="fa fa-times" id="sidebarIcon" onclick="closesideBar()"></i>
+
+
+            </div>
+            <div class="sidebar-menu ">
+                <div class="sidebar-link  ">
+                    <i class="fa fa-home">
+                    </i>
+                    <a href="/dashboard">Dashboard</a>
+                </div>
+
+                <h2>Management</h2>
+                <div class="sidebar-link">
+                    <i class="fa fa-wrench"></i>
+                    <a href="#">Admin Management</a>
+                </div>
+
+                <div class="sidebar-link  ">
+                    <i class="fa fa-users"></i>
+                    <a href="/admin/list/resident">Resident Management</a>
+                </div>
+                 <div class="sidebar-link active-menu-link ">
+                    <i class="fa fa-users"></i>
+                    <a href="#">Resident Deposit</a>
+                </div>
+                <div class="sidebar-link  ">
+                    <i class="fa fa-bus"></i>
+                    <a href="/admin/shuttle/management">Shuttle Bus Management</a>
+                </div>
+                <div class=" sidebar-link ">
+                    <i class=" fa fa-money"></i>
+                    <a href="/admin/business/management">Business Owner Management</a>
+                </div>
+                <div class="sidebar-link">
+                    <i class="fa fa-handshake-o"></i>
+                    <a href="/admin/view/users">User Management</a>
+                </div>
+                <div class="sidebar-link">
+                    <i class="fa fa-user-plus"></i>
+                    <a href="/admin/view/domestic">Domestic Staff Management</a>
+                </div>
+                <div class="sidebar-link">
+                    <i class="fa fa-home"></i>
+                    <a href="/admin/houses">House Management</a>
+                </div>
+                <div class="sidebar-link">
+                    <i class="fa fa-newspaper-o"></i>
+                    <a href="/admin/report/payment">Report</a>
+                </div>
+                <div class="sidebar-link">
+                    <i class="fa fa-sign-out"></i>
+                    <a href="#">Logout</a>
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+    <script src="/js/main.js"></script>
+</body>
+ <script>
+      function load(id,status) {
+   let newPost = document.getElementById("matchList");
+
+        let requestObj = "status=" + status;
+
+        let xhr = new XMLHttpRequest();
+        console.log(xhr.readyState);
+
+        xhr.onload = () => {
+        
+         newPost.innerHTML = `<h3 style=color:green; padding:5px;> ${xhr.responseText} </h3>`;;
+          console.log(xhr.responseText);
+        };
+
+        xhr.open("post", `/admin/confirm/deposit/${id}`, true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(requestObj);
+      }
+    </script>
+</html>

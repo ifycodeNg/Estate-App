@@ -1,0 +1,213 @@
+<%- include('./admin/partial/header') %>
+ <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+           
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+        
+             <div class="breadcrumb">
+<span> Resident Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Verify Domestic Staff</h3>
+                               
+                            </div>
+                        
+                        
+ 
+                  </div>
+                <form id="form" style="grid-template-columns:1fr ;">
+                    <div class="form-row">
+                        <label for="">Enter Ref Number</label>
+                                          <input id="uniqueId" placeholder="Enter Ref Number" required type="text">
+                                           </div>
+                                                <button onclick="load() "  id="submit">
+                                 <span id="btn_verify">Verify Staff</span>
+                        </button>
+               
+                </form>
+              </div>
+             
+          </div>
+                <div id="snackbar">
+      
+           </div>
+
+         
+           <div class="edit" id="detailModal" style="display: none;">
+            <p>View Staff Details</p>
+            <div style="margin-top: 10px;" class="user_pic">
+              <div >
+<img src="/img/avatar.svg"   height="100" width="100" alt="" id="image"> 
+              </div>
+               
+                                     
+           
+               </div>
+            
+           
+            <form id="form">
+
+            <div class="form-edit">
+              <label for="">
+                Fullname
+              </label>
+              <input id="name" disabled type="text">
+              </div>
+              <div class="form-edit">
+                <label for="">
+                  Address
+                </label>
+                <input id="address" disabled type="text">
+                </div>
+                <div class="form-edit">
+                    <label for="">
+                      Location
+                    </label>
+                    <input id="location" disabled type="text">
+                    </div>
+           <div class="form-edit">
+              <label for="">
+                Job Type
+              </label>
+              <input id="jobType" disabled type="text">
+              </div>
+           <div class="form-edit">
+              <label for="">
+             Job Role
+              </label>
+              <input id="jobRole" disabled  type="text">
+              </div>
+              <div class="form-edit">
+                <label for="">
+               Telephone
+                </label>
+                <input id="telephone" disabled  type="text">
+                </div>
+          
+         
+         
+
+
+</form>
+                     </div>
+         
+         
+
+
+</form>
+        </main>
+        
+        
+    </div>
+   
+    </div>
+      
+
+    <script>
+    window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+    let user_name=document.getElementById("user_name")   
+    user_role=document.getElementById("user_role")
+    xhr.onload = () => {
+    let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+       function load() {
+        let snackBar=document.getElementById("snackbar")
+        let btn = document.getElementById("submit");
+        let detailModal = document.getElementById("detailModal");
+        detailModal.style.display="none"
+        let uniqueId=document.getElementById("uniqueId").value
+        btn.classList.add("loading")
+        let btn_verify= document.getElementById("btn_verify")
+        btn_verify.style.visibility="hidden"
+        btn.disabled=true
+     
+      let xhr = new XMLHttpRequest();
+        xhr.onload = () => {
+         btn.disabled=false
+             btn.classList.remove("loading")
+             btn_verify.style.visibility="visible"
+            if(xhr.status !== 201 ){
+                alert(xhr.responseText)
+            }
+            else{
+                let data=JSON.parse(xhr.responseText)  
+                if(data.length == 0){
+                    alert("No Detail Found")
+                }
+                else{
+                    add_data(data)
+                }
+                
+            }             
+        };
+
+        let requestObj=`uniqueId=${uniqueId}`
+        xhr.open("post", `/verify/staff`, true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(requestObj);
+      }
+   
+    function add_data(data){
+//       let user_name=document.getElementById("user_name")   
+// let user_role=document.getElementById("user_role")
+// user_name.textContent=data.profile[0].fullname
+// user_role.textContent=data.profile[0].role
+let obj = {
+                fullname: document.getElementById("name"),
+                telephone: document.getElementById("telephone"),
+                address: document.getElementById("address"),
+                location: document.getElementById("location"),
+                jobType: document.getElementById("jobType"),
+                jobRole: document.getElementById("jobRole"),
+        };
+        obj.fullname.value=data[0].fullname
+        obj.telephone.value=data[0].telephone
+        obj.address.value=data[0].address
+        obj.jobType.value=data[0].fullname
+        obj.jobRole.value=data[0].department
+        obj.location.value=data[0].location
+        let detailModal=document.getElementById("detailModal")
+        detailModal.style.display="block"
+  }
+    
+    </script>
+  </body>
+</html>

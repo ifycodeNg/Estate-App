@@ -1,0 +1,245 @@
+<%- include('./partial/header') %>
+ 
+
+<div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+           
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4><%=profile[0].fullname%></h4>
+                <small> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span>User Management </span>
+<span>View Users</span>
+<span id="current">Edit User</span>
+
+                    </div>
+              <div>
+               <span class="exit" onclick=back()><i class="las la-long-arrow-alt-left"></i></span>
+            </div >       
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Edit User</h3>
+                               
+                            </div>
+                        
+                        
+ 
+                  </div>
+                <form id="form">
+                    <div class="form-row">
+ <label for="">Fullname</label>
+                   <input id="name" value="<%=body[0].fullname%>" required type="text">
+                    </div>
+                     <div class="form-row">
+ <label for="">Username</label>
+                   <input id="username" value="<%=body[0].username%>" required type="text">
+                    </div>
+                  <div class="form-row">
+ <label for="">Telephone</label>
+                   <input id="telephone" value="<%=body[0].telephone%>" required type="text">
+                    </div>
+                      <div class="form-row">
+ <label for="">Password</label>
+                   <input id="password" type="text">
+                    </div>
+              
+                      <div class="form-row">
+ <label for="">Email Address</label>
+                   <input id="email" placeholder="Optional" value="<%=body[0].email%>" type="email" type="text">
+                    </div>
+                   
+               <div class="form-row">
+                 <label for="">Status Of User</label>
+                 <select id="status">
+                <option value="<%=body[0].status%>" selected disabled>
+                                                 <%if (body[0].status=="InActive" ){%>
+                                Deactivated <%}%> <% if
+                                (body[0].status=="Active" ){%> Activated <%}%>
+                              </option>
+                              <option value="InActive">Deactivate</option>
+
+                              <option value="Active">Activate</option>
+                 </select>
+               </div>     
+                         <div class="form-row">
+ <label for="">Role</label>
+ <div id="check" style="margin-top: 1rem;">
+ <div>
+  <% if (body[0].is_SuperAdmin){%>
+   <input type="checkbox" checked name="Super Admin">
+     <% } %>
+  <% if (!body[0].is_SuperAdmin){%> 
+     <input type="checkbox" name="Super Admin">
+       <% } %>
+<label for="">Super Admin</label>
+                
+ </div>
+ <div>
+   <% if (body[0].is_ResidentManager){%>
+   <input type="checkbox" checked name="Resident Manager" >
+       <% } %>
+ <% if (!body[0].is_ResidentManager){%>
+   <input type="checkbox" name="Resident Manager" >
+       <% } %>
+
+   <label for="">Resident Manager</label>
+                
+ </div>
+<div>
+  <% if (body[0].is_shuttleManager){%>
+  <input type="checkbox" checked name="Shuttle Bus Manager" >
+   <% } %>
+    <% if (!body[0].is_shuttleManager){%>
+  <input type="checkbox" name="Shuttle Bus Manager" >
+   <% } %>
+                <label for="">Shuttle Bus Manager</label>
+               
+</div>
+<div>
+  <% if (body[0].is_RevenueManager){%>
+  <input type="checkbox" checked name="Revenue Manager" >
+     <% } %>
+    <% if (!body[0].is_RevenueManager){%>
+  <input type="checkbox" name="Revenue Manager" >
+     <% } %>
+                 <label for="">Revenue Manager</label>
+                
+</div>
+<div>
+  <% if (body[0].is_CornerShopManager){%>
+  <input type="checkbox" checked name="Corner Shop Manager" >
+  <% } %>
+  <% if (!body[0].is_CornerShopManager){%>
+  <input type="checkbox" name="Corner Shop Manager" >
+  <% } %>
+    <label for="">Corner Shop Manager</label>
+                
+</div>
+ </div>
+
+    </div>
+                        <button onclick="load(<%=body[0].userId%>) " id="submit">
+                            <span id="text">Update</span>
+                        </button>
+                   
+                </form>
+               
+              </div>
+             
+          </div>
+            <div id="snackbar">
+      
+           </div>
+        </main>
+        
+        
+    </div>
+   
+    </div>
+      
+</body>
+
+ <script type="text/javascript">
+ function checked() {
+  let roles=[]
+   let check=document.getElementById("check").querySelectorAll("input")
+console.log(check)
+for(let i=0;i<check.length;i++){
+  console.log(check[i].checked)
+  if(check[i].checked){
+    console.log(check[i].name)
+    
+    roles.push(check[i].name)
+  }
+  else{
+
+  }
+}
+return roles.sort()
+}
+  function back() {
+        history.back(-1)
+      }
+    </script>
+    <script>
+      function load(id) {
+   let snackBar=document.getElementById("snackbar")
+        let text=document.getElementById("text")
+        let btn = document.getElementById("submit");
+        let form=document.getElementById("form")
+        form.addEventListener("submit",(e)=>{
+        e.preventDefault()
+        btn.classList.add("loading")
+        btn.disabled=true
+        text.style.visibility="hidden"
+        })
+        let obj = {
+          email: document.getElementById("email"),
+          password: document.getElementById("password"),
+          telephone: document.getElementById("telephone"),
+          name: document.getElementById("name"),
+          role: checked(),
+          username:document.getElementById("username"),
+          status: document.getElementById("status"),
+        };
+
+        let requestObj =
+          "email=" +
+          obj.email.value +
+          "&telephone=" +
+          obj.telephone.value +
+          "&password=" +
+          obj.password.value +
+          "&name=" +
+          obj.name.value +
+          "&username=" +
+          obj.username.value +
+          "&status=" +
+          obj.status.value +
+          "&role=" +
+          obj.role;
+
+        let xhr = new XMLHttpRequest();
+         xhr.onload = () => {
+        btn.disabled=false
+          snackBar.innerText = ` ${xhr.responseText}`
+          text.style.visibility="visible"
+          snackBar.className="show"
+                btn.classList.remove("loading")
+                setTimeout(()=>{
+                    snackBar.className=snackBar.className.replace("show","")
+
+                },3000)  
+              }
+ xhr.open("post", `/admin/user/edit/<%=body[0].userId%>`, true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(requestObj);
+      
+            }            
+      
+    </script>
+  </body>
+</html>

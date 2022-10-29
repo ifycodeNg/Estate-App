@@ -1,0 +1,177 @@
+<%- include('./partial/header') %>
+  <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+          <div class="search-wrapper">
+                <span class="las la-search">
+                 </span>
+                    <input type="search" name="" placeholder="Search " id="">
+                
+            </div>
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Super Admin</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+        
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>All Shuttle Drivers</h3>
+                               
+                            </div>
+                        
+                
+                      
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%" id="user_table">
+                                <thead>
+                                    <tr>
+                                        <td>S/N</td>
+
+
+                                    </td>
+                                <td>
+                                      Fullname
+                                        
+                                    </td>
+                               
+                                    <td>
+                                       Telephone
+                                        
+                                    </td>
+                                     <td>
+                                       Address
+                                        
+                                    </td>
+                                    
+                                    <td>
+                                       Employer
+                                        
+                                    </td>
+                                 <td>
+                                       Emp Telephone
+                                    </td>
+                                    <td>JobType</td>
+                                    <td>Veh No</td>
+                                    <td>Veh Type</td>
+                                    
+                                     <td>
+                                       Status
+                                        
+                                    </td></tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+  
+    <script>
+      function load() {
+   let newPost = document.getElementById("matchList");
+     let xhr = new XMLHttpRequest();
+        console.log(xhr.readyState);
+        xhr.onload = () => {
+    
+            let data=JSON.parse(xhr.responseText)
+            console.log(data)
+            add_data(data)
+ };
+
+        xhr.open("get", `/api/driver`, true);
+        xhr.send();
+      }
+      load()
+function add_data(data){
+let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+user_name.textContent=data.profile[0].fullname
+user_role.textContent=data.profile[0].role
+let table=document.getElementById("user_table")  
+for (let i = 0; i < data.data.length; i++) {
+let tr=document.createElement("tr")
+ tr.innerHTML=
+ `<td>${i+1}</td>`+
+  
+  
+ `<td>`+data.data[i].fullname +`</td>`+
+ 
+ `<td>${data.data[i].telephone  }</td>`+
+  `<td>${data.data[i].address} </td>`+
+ `<td>${data.data[i].employer}</td>`+
+ `<td>${data.data[i].tele_employer}</td>`+
+ `<td>${data.data[i].jobType}</td>`+
+ `<td>${data.data[i].vehicle_no}</td>`+
+ `<td>${data.data[i].vehicle_type}</td>`+
+ `<td>`+
+      `<span class="status green"></span>`+ "Active"
+  +` </td>`
+    
+    table.append(tr) 
+}
+}
+
+  
+      // function load(id,action) {
+         
+      //   let btn = document.getElementById("deactivate");
+      //   btn.addEventListener("click", (e) => {
+        
+      //   });
+
+      //   let obj = {
+      //     action: document.getElementById("deactivate"),
+      //     response: document.getElementById("response"),
+      //   };
+
+      //   let requestObj = "action=" + action;
+
+      //   let xhr = new XMLHttpRequest();
+      //   console.log(xhr.readyState);
+      //   if(xhr.readyState ==0){
+      //     window.location.reload()
+         
+      //   }
+      //   xhr.onload = () => {
+      //     response.text = ` ${xhr.responseText} `;
+      //     console.log(xhr.responseText);
+      //   };
+
+      //   xhr.open("post", `/admin/deactivate/user/${id}`, true);
+      //   xhr.setRequestHeader(
+      //     "Content-Type",
+      //     "application/x-www-form-urlencoded"
+      //   );
+      //   xhr.send(requestObj);
+      // }
+    </script>
+  </body>
+</html>

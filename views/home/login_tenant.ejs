@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login </title>
+	<link rel="stylesheet" type="text/css" href="/css/style.css">
+	  <link rel="manifest" href="/css/manifest_resident.json" />
+    <meta name="theme-color" content="green" />
+	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body style="position: relative;">
+	     
+         <% if (errors != ""){ %>
+<%errors.forEach((error)=>{%>
+  <div class="alert-danger" style="position: absolute; width: 100%;" >
+    
+    <p  ><%- error %></p>  
+  </div>
+  
+<%})%>
+    <%  } %>
+
+  
+	 <img class="wave" src="/image/login_img_medium.jpg" />
+	<div class="container">
+		<div class="img">
+		</div>
+		<div class="login-content">
+			<form action="/tenant/verify" method="POST" >
+				<p class="new_title">
+				<span style="display:block;">WELCOME</span><span style="display:block;"> TO </span><span style="display:flex;">	PRINCE & PRINCESS</span> ESTATE 
+				</p>
+<div class="img_log"> <img src="/img/avatar.svg" /></div>
+				<!-- <h2 class="title">Welcome</h2> -->
+			
+           		<div class="input-div one">
+           		   <div class="i">
+           		   		<i class="fas fa-user"></i>
+           		   </div>
+           		   <div class="div">
+           		   		<h5>Username</h5>
+           		   		<input type="text" required name="username" class="input">
+           		   </div>
+           		</div>
+           		<div class="input-div pass">
+           		   <div class="i"> 
+           		    	<i class="fas fa-lock"></i>
+           		   </div>
+           		   <div class="div">
+           		    	<h5>Password</h5>
+           		    	<input type="password" name="password" class="input" required>
+            	   </div>
+            	</div>
+				<a id="forget_password"  href="/resident/forget/password">Forgot Password ?</a>
+				<input type="checkbox" name="" id="">
+				By clicking this box you accept the terms and conditions of the ESTATE
+				
+            	<button class="btn"><span class="loginBtn">Login</span></button>
+            </form>
+        </div>
+    </div>
+	
+	<script type="text/javascript" src="/js/main.js"></script>
+<script>
+
+</script>
+</body>
+</html>

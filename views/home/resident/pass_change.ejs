@@ -1,0 +1,121 @@
+<%- include('./partial/header') %>
+
+        <div
+          class="bg-gray-100 mx-auto max-w-6xl bg-white py-10 px-12 lg:px-24 shadow-xl mb-24"
+        >
+         <section class="py-8 relative">
+              <a href="#" onclick=back() class="nav__link absolute left-0">
+    <i class="material-icons nav__icon">arrow_back</i>
+    <span class="nav__text font-body">Back</span>
+  </a>
+            <h3 class="text-center font-bold text-lg">Password Update</h3>
+          </section>
+     
+          <form id="btn">
+         
+            <div class="-mx-3 md:flex mb-6">
+              <div class="md:w-full px-3">
+                <label
+                  class="uppercase tracking-wide text-black text-xs font-bold mb-2"
+                  for="application-link"
+                >
+                  Password
+                </label>
+                <input
+                  
+              
+                  class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                  id="password"
+                  type="text"
+                          />
+              </div>
+              <div class="md:w-full px-3">
+                <label
+                  class="uppercase tracking-wide text-black text-xs font-bold mb-2"
+                  for="application-link"
+                >
+                Confirm Password
+                </label>
+                <input
+                  
+              
+                  class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                  id="password"
+                  type="text"
+                          />
+              </div>
+
+            </div>
+
+            
+
+            <div class="-mx-3 md:flex mt-2">
+              <button
+                id="submit"
+                type="submit"
+                onclick="load()"
+                class="md:w-full bg-gray-900 text-white font-bold py-2 px-4 relative    hover:border-gray-100 rounded-full cursor-pointer"
+              >
+                <span class="text">Update Password </span>
+              </button>
+            </div>
+          </div>
+
+          <h4
+            id="matchlist"
+            class="text-green flex text-center font-bold py-2 px-4 border-b-4"
+          ></h4>
+        </div>
+      </form>
+    </main>
+  </body>
+
+  <script>
+
+   
+
+     function load() {
+           
+            let form=document.getElementById("btn")
+             let btn = document.getElementById("submit")
+            
+            form.addEventListener("submit",(e=>{
+                e.preventDefault()
+                btn.classList.add("loading")
+                btn.disabled=true
+                let newPost = document.getElementById("matchlist")
+            let obj = {
+                password: document.getElementById("password"),
+
+            }
+            let formData = new FormData()
+            formData.append("password", obj.password.value)
+
+            let xhr = new XMLHttpRequest()
+            console.log(xhr.readyState)
+
+            xhr.onload = () => {
+                newPost.innerText = ` ${xhr.responseText}`
+                btn.classList.remove("loading")
+                btn.disabled=false
+                alert(xhr.responseText)
+                location.reload()
+            }
+
+            xhr.open("post", "/resident/change/p/", true);
+
+            xhr.send(
+                formData
+            )
+            }))
+            
+            
+
+        }
+  function back() {
+               history.back(-1)
+            }
+
+
+  </script>
+</html>

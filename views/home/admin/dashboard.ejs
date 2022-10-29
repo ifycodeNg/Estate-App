@@ -1,0 +1,423 @@
+<%- include('./partial/header') %>
+
+            <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+           
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4><%=profile[0].fullname%></h4>
+  <small>Administrator</small>             
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+            <div class="start_text">
+<p style="text-align: center;">
+    Welcome To the Prince & Princess Estate Management Application
+</p>
+</div>  
+  <% if (user.is_SuperAdmin){%> 
+          <div class="cards">
+                <div class="card-single">
+                    <span><i class="las la-user"></i></span>
+                    <div class="card-inner">
+                        <p class="text-primary">Active Residents</p>
+                        <span class="font-bold text-title"><%=active[0].active%></span>
+                    </div>
+                </div>
+
+                <div class="card-single">
+                   <span><i class="las la-user"></i></span>
+                    <div class="card-inner">
+                        <p class="text-primary"> Inactive Residents</p>
+                        <span class="font-bold text-title"><%=inactive[0].in_active%></span>
+                    </div>
+                </div>
+
+                <div class="card-single">
+                   <span><i class="las la-user"></i></span>
+                    <div class="card-inner">
+                        <p class="text-primary"> Users</p>
+                        <span class="font-bold text-title"><%=users[0].users%></span>
+                    </div>
+                </div>
+                   <div class="card-single">
+                   <span><i class="las la-user"></i></span>
+                    <div class="card-inner">
+                        <p class="text-primary"> Domestic Staffs</p>
+                        <span class="font-bold text-title"><%=domestic[0].domestic_staff%></span>
+                    </div>
+                </div>
+                  
+   <div class="card-single">
+                   <span><i class="las la-user"></i></span>
+                    <div class="card-inner">
+                        <p class="text-primary"> No Of Corner Shop Users</p>
+                        <span class="font-bold text-title"><%=corner_users[0].corner_users%></span>
+                    </div>
+                </div>
+
+
+<div class="card-single">
+                   <span><i class="las la-user"></i></span>
+                    <div class="card-inner">
+                        <p class="text-primary"> No Of Shuttle Bus Owners</p>
+                        <span class="font-bold text-title"><%=shuttle_users[0].shuttle_users%></span>
+                    </div>
+                </div>
+
+
+               
+
+
+
+            </div>
+             <div id="chart"></div>
+               <% } %>
+             <% if (user.is_ResidentManager || user.is_SuperAdmin){%> 
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                        <h3>Pending Payments For Residents</h3>
+                          <% if (resident){%>
+                         
+                        <button><a href="/admin/resident/pending"><span><i class="las la-arrow-right"></i></span>See All</a> </button>
+                          <% } %>
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                        S/N
+
+                                    </td><td>
+                                        Drive No
+
+                                    </td>
+                                <td>
+                                        House No
+                                        
+                                    </td>
+                              
+                                <td>
+                                       Amount
+                                        
+                                    </td>
+                                 <td>
+                                       Status
+                                        
+                                    </td></tr>
+                                </thead>
+                                <tbody>
+                                         <% if (resident){%>
+                                                        <% for (let i=0; i < resident.length; i++){%>
+                                                            <tr>
+                                                                <td>
+                                                                    <%=(i +1)%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=resident[i].driveNo%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=resident[i].houseNo%>
+                                                                </td>
+                                                              
+                                                                 <td>
+                                                                    <%=resident[i].amount%>
+                                                                </td>
+                                                               
+                                                                <td>
+                                                                      <span class="status red"></span>
+                                                                     Pending
+                                                                </td>
+                                                                        
+                                                            </tr>
+                                                            <% } %>
+                                                                <% } %>
+
+                                      
+                                     
+                                     
+                                     
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           <% } %>
+   <% if (user.is_ShuttleManager || user.is_SuperAdmin){%>
+           <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                        <h3>Pending Payments For Shuttle Bus Owners</h3>
+                        <% if (shuttle){%>
+                        <button><a href="/admin/deposit/shuttle"><span><i class="las la-arrow-right"></i></span>See All</a> </button>
+                          <% } %> </div>
+                        <div class="card-body">
+                        <table width="100%">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            S/N
+                                        </td>
+                                        <td>
+                                        Name Of Payee
+
+                                    </td>
+                                <td>
+                                        Name Of Operator
+                                        
+                                    </td>
+                                <td>
+                                        Telephone No
+                                        
+                                    </td>
+                                <td>
+                                       Amount
+                                        
+                                    </td>
+                                 <td>
+                                       Status
+                                        
+                                    </td></tr>
+                                </thead>
+                                <tbody>
+                                  
+      <% if (shuttle){%>
+                                                        <% for (let i=0; i < shuttle.length; i++){%>
+                                                            <tr>
+                                                                <td>
+                                                                    <%=(i +1)%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=shuttle[i].payee%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=shuttle[i].fullname%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=shuttle[i].telephone%>
+                                                                </td>
+                                                                 <td>
+                                                                    <%=shuttle[i].amount%>
+                                                                </td>
+                                                                
+                                                             
+
+
+
+
+
+                                                                <td>
+
+                                                                
+                                                                        
+                                                                         <span class="status red"></span>
+                                                                            Pending
+                                                                          
+                                                                      
+                                                                     
+                                                                          
+                                                                          
+                                                                </td>
+
+
+
+                                                            </tr>
+                                                            <% } %>
+                                                                <% } %>
+
+                                   
+                                  
+                                    
+                                     
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+           
+          </div>
+           <% } %>
+
+
+
+              <% if (user.is_CornerShopManager || user.is_SuperAdmin){%>
+           <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                        <h3>Pending Payments For Corner Shop Owners</h3>
+                        <% if (business){%>
+                        <button><a href="/admin/pending/business"><span><i class="las la-arrow-right"></i></span>See All</a> </button>
+                          <% } %> </div>
+                        <div class="card-body">
+                        <table width="100%">
+                                <thead>
+                                    <tr>
+                                        <td>S/N</td>
+                                        <td>
+                                        Name Of Payee
+
+                                    </td>
+                                <td>
+                                        Operator Name
+                                        
+                                    </td>
+                                <td>
+                                        Telephone No
+                                        
+                                    </td>
+                                <td>
+                                       Amount
+                                        
+                                    </td>
+                                 <td>
+                                       Status
+                                        
+                                    </td></tr>
+                                </thead>
+                                <tbody>
+                                  
+      <% if (business){%>
+                                                        <% for (let i=0; i < business.length; i++){%>
+                                                            <tr>
+                                                                <td>
+                                                                    <%=(i +1)%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=business[i].payee%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=business[i].fullname%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=business[i].telephone%>
+                                                                </td>
+                                                                 <td>
+                                                                    <%=business[i].amount%>
+                                                                </td>
+                                                                
+                                                             
+
+
+
+
+
+                                                                <td>
+
+                                                                
+                                                                        
+                                                                         <span class="status red"></span>
+                                                                            Pending
+                                                                          
+                                                                      
+                                                                     
+                                                                          
+                                                                          
+                                                                </td>
+
+
+
+                                                            </tr>
+                                                            <% } %>
+                                                                <% } %>
+
+                                   
+                                  
+                                    
+                                     
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+           
+          </div>
+           <% } %>
+
+        </main>
+        
+        
+    </div>
+   
+    
+      
+
+<script>
+const chart = toastui.Chart;
+
+</script>
+<script>
+    const el = document.getElementById('chart');
+const data = {
+  categories: ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July'],
+  series: [
+    {
+      name: 'Resident',
+      data: [5000, 3000, 5000, 7000, 6000, 4000, 1000],
+    },
+    {
+      name: 'Shuttle Bus Owners',
+      data: [8000, 10000, 7000, 2000, 8000, 3000, 5000],
+    },
+     {
+      name: 'Revenue',
+      data: [8000, 4000, 7000, 2000, 6000, 3000, 5000],
+    },
+  ],
+};
+
+const options = {
+  chart: { width: 900, height: 400 },
+};
+
+
+
+
+chart.lineChart({ el, data, options });
+
+
+</script>
+
+
+<script>
+    let jan = []
+    let feb = []
+    let march = []
+    let april = []
+    let may = []
+    let june = []
+    let july = []
+    let aug = []
+    let sept = []
+    let oct = []
+    let nov = []
+    let dec = []
+
+
+    
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+<%- include('./partial/header'); %>
+    <div class="bg-gray-100 mx-auto max-w-6xl bg-white py-20 px-12 lg:px-24 shadow-xl mb-24">
+ <section class="py-8 relative">
+     <a href="#" onclick=back() class="nav__link absolute left-0">
+    <i class="material-icons nav__icon">arrow_back</i>
+    <span class="nav__text font-body">Back</span>
+  </a>
+            <h3 class="text-center font-bold text-lg">Edit Staff Info</h3>
+          </section>     
+            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
+                <div class="-mx-3 md:flex mb-6">
+                    <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="company">
+                            Full Name *
+                        </label>
+                        <input class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                            id="fullname" type="text" value="<%=body[0].fullname%>" name="fullname"
+                            placeholder="Full Name">
+                        <div>
+                            <span class="text-red-500 text-xs italic">
+                                Please fill out this field.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 px-3">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="title">
+                            Telephone Number *
+                        </label>
+                        <input name="telephone"
+                            class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                            id="telephone" type="tel" value="<%=body[0].telephone%>" placeholder="+234.....">
+                    </div>
+                </div>
+                <div class="-mx-3 md:flex mb-6">
+                    <div class="md:w-full px-3">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="application-link">
+                            Home Address *
+                        </label>
+                        <input name="address"
+                            class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                            id="address" type="text" placeholder="" value="<%=body[0].address%>">
+                    </div>
+                </div>
+                <div class="-mx-3 md:flex mb-2">
+                    <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="location">
+                            Location *
+                        </label>
+                    </div>
+                   
+                </div>
+                <div class="-mx-3 md:flex mt-2">
+ <button
+                id="submit"
+                type="submit"
+                onclick="load()"
+                class="md:w-full bg-gray-900 text-white font-bold py-2 px-4 relative    hover:border-gray-100  cursor-pointer"
+              >
+                <span class="text">Update </span>
+              </button>
+                </div>
+            </div>
+
+
+            <h4 id="matchlist" class="text-green font-bold py-2 px-4 ">
+
+            </h4>
+        </div>
+    </body>
+    <script>
+        function load() {
+              let btn = document.getElementById("submit")
+            let form=document.getElementById("btn")
+            form.addEventListener("submit",(e=>{
+                e.preventDefault()
+                btn.classList.add("loading")
+                let newPost = document.getElementById("matchlist")
+            }))
+            let obj = {
+                fullname: document.getElementById("fullname"),
+                telephone: document.getElementById("telephone"),
+                address: document.getElementById("address"),
+                location: document.getElementById("location"),
+               
+                vehicle_no: document.getElementById("vehicle_no"),
+                vehicle_type: document.getElementById("vehicle_type")
+            }
+
+            let requestObj = "fullname=" + obj.fullname.value + "&telephone=" + obj.telephone.value + "&address=" + obj.address.value + "&location=" + obj.location.value + "&vehicle_no=" + obj.vehicle_no.value+"&vehicle_type=" + obj.vehicle_type.value
+
+            let xhr = new XMLHttpRequest()
+            console.log(xhr.readyState)
+
+            xhr.onload = () => {
+                btn.classList.remove("loading")
+                obj.fullname.value = "";
+                obj.telephone.value = "";
+                obj.address.value = "";
+                obj.location.value = "";
+               
+                obj.vehicle_type.value="";
+                obj.vehicle_no.value="";
+                newPost.innerText = ` ${xhr.responseText}`
+                console.log(xhr.responseText)
+            }
+
+            xhr.open("post", "/shuttle/update/driver/<%=body[0].id%>", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send(
+                requestObj
+            )
+
+        }
+            function back() {
+               history.back(-1)
+            }
+
+
+    </script>
+
+</html>

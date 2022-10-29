@@ -1,0 +1,160 @@
+<%- include('./partial/header') %>
+ <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+            
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Super Admin</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span> Shuttle Bus Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Add A Shuttle Bus Owner</h3>
+                               
+                            </div>
+                        
+                        
+ 
+                  </div>
+                <form id="form">
+                    <div class="form-row">
+ <label for="">Fullname</label>
+                   <input id="fullname" required type="text">
+                    </div>
+                  <div class="form-row">
+ <label for="">Telephone</label>
+                   <input id="telephone" required type="text">
+                    </div>
+                    
+                      <div class="form-row">
+ <label for="">Home Address</label>
+                   <input id="address" required type="text">
+                    </div>
+                       <div class="form-row">
+ <label for="">Number Of Buses</label>
+                   <input id="no_bus" required type="text">
+                    </div>
+                 <div>
+                   
+                 </div>
+                     <button onclick="load() " id="submit">
+                                 <span id="text">Create</span>
+                        </button>
+                   
+                </form>
+              </div>
+             
+          </div>
+           <div id="snackbar">
+
+           </div>
+        </main>
+        
+        
+    </div>
+   
+    </div>
+      
+
+
+    <script>
+    window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+       function load() {
+
+        let snackBar=document.getElementById("snackbar")
+        let btn = document.getElementById("submit");
+        let text=document.getElementById("text")
+        let form=document.getElementById("form")
+        form.addEventListener("submit",(e)=>{
+          e.preventDefault()
+        btn.classList.add("loading")
+        btn.disabled=true
+        text.style.visibility="hidden"
+   })
+        let obj = {
+          fullname: document.getElementById("fullname"),
+          address: document.getElementById("address"),
+          telephone: document.getElementById("telephone"),
+          no_bus: document.getElementById("no_bus")
+        
+        };
+
+        let requestObj =
+          "fullname=" +
+          obj.fullname.value +
+          "&address=" +
+          obj.address.value +
+          "&telephone=" +
+          obj.telephone.value +
+           "&no_bus=" +
+          obj.no_bus.value 
+      let xhr = new XMLHttpRequest();
+        console.log(xhr.readyState);
+
+        xhr.onload = () => {
+          obj.fullname.value = "";
+          obj.address.value = "";
+          obj.telephone.value = "";
+          obj.no_bus.value = "";
+          btn.disabled=false
+          snackBar.innerText = ` ${xhr.responseText}`
+          snackBar.className="show"
+                btn.classList.remove("loading")
+                text.style.visibility="visible"
+                setTimeout(()=>{
+                    snackBar.className=snackBar.className.replace("show","")
+
+                },3000)  
+        };
+
+        xhr.open("post", "/admin/add/shuttle", true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(requestObj);
+      }
+    
+    </script>
+     
+  </body>
+</html>

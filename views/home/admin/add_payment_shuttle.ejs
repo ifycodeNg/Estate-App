@@ -1,0 +1,195 @@
+<%- include('./partial/header') %>
+        <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+           
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+ <div class="breadcrumb">
+<span> Shuttle Bus Management </span>
+<span id="current"></span>
+
+                    </div>
+                    
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Record Payment</h3>
+                               
+                            </div>
+                        
+                        
+ 
+                  </div>
+                <form id="form">
+                    <div class="form-row">
+ <label for="">Shuttle Owner</label>
+                      <select name="" id="shuttleOwner">
+                        
+                        </select>
+                    </div>
+                   
+                  <div class="form-row">
+ <label for="">Payee</label>
+                   <input id="payee" required type="text">
+                    </div>
+                    
+                      <div class="form-row">
+ <label for="">Amount</label>
+                   <input id="amount" required type="text">
+                    </div>
+                     <div class="form-row">
+ <label for="">Teller Number</label>
+                   <input id="teller_no" required type="text">
+                    </div>
+                      <div class="form-row">
+ <label for="">Receipt Issued</label>
+                   <input id="given"   type="checkbox">
+                    </div> 
+                      <div class="form-row">
+ <label for="">Teller Picture</label>
+ <input accept="image/*" type="file" id="image"  >
+                    </div> 
+                 
+                         <button id="btn" onclick="submitData()">
+                            <span>Record Payment</span>
+                        </button>
+                </form>
+              </div>
+             
+          </div>
+            <div id="snackbar">
+      
+           </div>
+        </main>
+        
+        
+    </div>
+   
+    </div>
+      
+</body>
+<script>
+  window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+function load() {
+          let role= `ShuttleOwner`
+          let xhr = new XMLHttpRequest();
+          let requestObj="role="+`ShuttleOwner`;
+          console.log(xhr.readyState);
+          xhr.onload = () => {
+             console.log(xhr.responseText)
+              let data=JSON.parse(xhr.responseText)
+             
+              add_data(data)
+         };
+
+        xhr.open("get", `/api/users/${role}`, true);
+        xhr.send(requestObj); 
+
+}
+load()
+
+  function add_data(data){
+    let shuttleOwner=document.getElementById("shuttleOwner") 
+    shuttleOwner.innerHTML='' 
+    for (let i = 0; i < data.length; i++) {
+      console.log(data.length)
+       let option=document.createElement("option")
+       option.value=`${data[i].userId}`
+       option.text=`${data[i].fullname}`
+       shuttleOwner.append(option)
+    }
+  }
+   function submitData() {
+        let form=document.getElementById("form")
+        let btn=document.getElementById("btn")
+        let text=document.getElementById("text")
+        let snackBar=document.getElementById("snackbar")
+       form.addEventListener("submit",(e)=>{
+          e.preventDefault()
+        btn.classList.add("loading")
+        text.style.visibility="hidden"
+        btn.disabled=true
+       })
+        let given=document.getElementById(`given`)
+        let val=given.checked
+        value=val?"true":"false"
+        let obj = {
+          shuttle: document.getElementById("shuttleOwner"),
+          payee: document.getElementById("payee"),
+          teller_no: document.getElementById("teller_no"),
+          amount: document.getElementById("amount"),
+          image: document.getElementById("image"),
+        };
+           let formData = new FormData()
+            formData.append("user",obj.shuttle.value)
+            formData.append("image", obj.image.files[0])
+            formData.append("payee", obj.payee.value)
+            formData.append("given", value)
+            formData.append("amount", obj.amount.value)
+            formData.append("receipt", obj.teller_no.value)
+            
+
+          let xhr = new XMLHttpRequest();
+          console.log(xhr.readyState);
+
+         xhr.onload = () => {
+              console.log(xhr.responseText);
+           btn.disabled=false
+                snackBar.innerText = ` ${xhr.responseText}`
+
+                snackBar.className="show"
+                btn.classList.remove("loading")
+                text.style.visibility="visible"
+                setTimeout(()=>{
+                    snackBar.className=snackBar.className.replace("show","")
+
+                },3000)  
+          obj.shuttle.value = "";
+          obj.payee.value = "";
+          obj.teller_no.value = "";
+          obj.amount.value = "";
+           obj.image.value = "";
+        };
+
+        xhr.open("post", "/user/make/payment", true);
+       
+        xhr.send(formData);
+
+             }
+</script>
+</html>

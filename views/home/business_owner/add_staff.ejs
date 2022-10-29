@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/tailwind.css">
+</head>
+
+<body class="antialiased">
+    <header class="h-16 flex items-center border-b border-grey-300">
+        <aside class="px-4 w-32 flex items-center justify-center">
+            <h1 class="font-bold">Dashboard</h1>
+        </aside>
+
+        <nav class="h-full flex-1 flex items-center justify-center ">
+            <ul class="h-16 flex space-x-3">
+                <li class="h-16 flex items-center"><a href="/business/home/">My Home</a></li>
+                <li class="h-16 flex items-center "><a href="/business/view/deposit">Deposit</a></li>
+
+                <li class="h-16 flex items-center"><a href="">Payments</a></li>
+                <li class="h-16 flex items-center border-b border-indigo-700"><a href="/business/dashboard/view">
+                        Staff</a></li>
+
+            </ul>
+
+        </nav>
+        <aside class="flex items-center pr-3 space-x-3">
+            <button class="rounded-full hover:bg-gray-300 h-12 w-12 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"></path>
+                </svg>
+            </button>
+            <button class="rounded-full hover:bg-gray-300 h-12 w-12 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 3H6a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h4M16 17l5-5-5-5M19.8 12H9" />
+                </svg>
+            </button>
+        </aside>
+    </header>
+
+    <body class="bg-gray-100 flex bg-local" style="background: url('./assets/svg/architect.svg')">
+        <div class="bg-gray-100 mx-auto max-w-6xl bg-white py-20 px-12 lg:px-24 shadow-xl mb-24">
+
+            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
+                <div class="-mx-3 md:flex mb-6">
+                    <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="company">
+                            Full Name*
+                        </label>
+                        <input class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                            id="fullname" type="text" name="fullname" placeholder="Full Name">
+                        <div>
+                            <span class="text-red-500 text-xs italic">
+                                Please fill out this field.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 px-3">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="title">
+                            Telephone Number*
+                        </label>
+                        <input name="telephone"
+                            class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                            id="telephone" type="tel" placeholder="+234.....">
+                    </div>
+                </div>
+                <div class="-mx-3 md:flex mb-6">
+                    <div class="md:w-full px-3">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="application-link">
+                            Home Address *
+                        </label>
+                        <input name="address"
+                            class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3"
+                            id="address" type="text" placeholder="">
+                    </div>
+                </div>
+                <div class="-mx-3 md:flex mb-2">
+                    <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="location">
+                            Location *
+                        </label>
+                        <div>
+                            <select
+                                class="w-full bg-gray-200 border border-gray-200 text-black text-xs py-3 px-4 pr-8 mb-3 rounded"
+                                id="location" name="location">
+                                <option>Abuja</option>
+                                <option>Enugu</option>
+                                <option>Lagos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 px-3">
+                        <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="job-type">
+                            Job Type*
+                        </label>
+                        <div>
+                            <select
+                                class="w-full bg-gray-200 border border-gray-200 text-black text-xs py-3 px-4 pr-8 mb-3 rounded"
+                                id="jobType" name="job-type">
+                                <option>Full-Time</option>
+                                <option>Part-Time</option>
+
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="-mx-3 md:flex mt-2">
+                    <div class="md:w-full px-3">
+                        <input type="submit" id="submit" onclick="load()" value="Register"
+                            class="md:w-full bg-gray-900 text-white font-bold py-2 px-4 border-b-4 hover:border-b-2 border-gray-500 hover:border-gray-100 rounded-full" />
+
+
+                    </div>
+                </div>
+            </div>
+
+
+            <h4 id="matchlist" class="text-green font-bold py-2 px-4 border-b-4 ">
+
+            </h4>
+        </div>
+    </body>
+    <script>
+        function load() {
+            let btn = document.getElementById("submit")
+
+            let newPost = document.getElementById("matchlist")
+            let obj = {
+                fullname: document.getElementById("fullname"),
+                telephone: document.getElementById("telephone"),
+                address: document.getElementById("address"),
+                location: document.getElementById("location"),
+
+            }
+
+            let requestObj = "fullname=" + obj.fullname.value + "&telephone=" + obj.telephone.value + "&address=" + obj.address.value + "&location=" + obj.location.value + "&jobType=" + obj.jobType.value + "&department=" + obj.department.value
+
+            let xhr = new XMLHttpRequest()
+            console.log(xhr.readyState)
+
+            xhr.onload = () => {
+                obj.fullname.value = "";
+                obj.telephone.value = "";
+                obj.address.value = "";
+                obj.location.value = "";
+
+                newPost.innerText = ` ${xhr.responseText}`
+                console.log(xhr.responseText)
+            }
+
+            xhr.open("post", "/business/register/staff", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send(
+                requestObj
+            )
+
+        }
+
+
+
+    </script>
+
+</html>

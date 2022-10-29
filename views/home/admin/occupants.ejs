@@ -1,0 +1,153 @@
+<%- include('./partial/header') %>
+        <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+            
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4><%=profile[0].fullname%></h4>
+                <small>Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span>Resident Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Occupants </h3>
+                               
+                               
+                            </div>
+                               
+                        
+                        
+                 
+                      
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%">
+                                <thead>
+                                   <tr>
+                                                        <th>S/N</th>
+                                                        <th>Image</th>
+                                                         <th>Occupant Name</th>
+                                                         <th>UId</th>
+                                                        <th>Telephone No</th>
+                                                        <th>Gender</th>
+                                                        <th>Owner Name</th>
+                                                        <th>Telephone Number</th>
+                                                         <th>Drive No</th>
+                                                       
+                                                        <th>House No</th>
+                                                  
+                                                           
+                                               
+                                                         <th>Status</th>
+                                                      
+                                                        
+
+                                                    </tr>
+                                </thead>
+                                <tbody>
+                                 
+                                     <% if (body){%>
+                                                        <% for (let i=0; i < body.length; i++){%>
+                                                            <tr>
+                                                                <td>
+                                                                    <%=(i +1)%>
+                                                                </td>
+                                                                 <td>
+                                                                <% if (body[i].image){%>
+                                                                  
+                                                                   <img src=/upload/<%=body[0].image%> height="50" width="50" style="object-fit:cover;border-radius:50%;" alt=""> 
+                                                                </td>
+                                                                <% } %>
+                                                                 <% if (!body[i].image){%>
+                                                                  
+                                                                   <img src="/img/avatar.svg" height="50" width="50" alt=""> 
+                                                                </td>
+                                                                <% } %>
+                                                               
+                                                                <td>
+                                                                    <%=body[i].occupant%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=body[i].unique_id%>
+                                                                </td>
+                                                               
+                                                                <td>
+                                                                    <%=body[i].telephone%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=body[i].gender%>
+                                                                </td>
+                                                                   <td>
+                                                                    <%=body[i].resident%>
+                                                                </td>
+                                                                 <td>
+                                                                    <%=body[i].telephone_resident%>
+                                                                </td>
+                                                               
+                                                                <td>
+                                                                    <%=body[i].driveNo%>
+                                                                </td>
+                                                                 <td>
+                                                                    <%=body[i].houseNo%>
+                                                                </td>
+                                                              
+                                                               
+                                                                <td>
+              
+                                                                               <span class="status green"></span>
+                                                                                   Active
+                                                                              
+                                                                           
+                                                                                
+                                                                </td>
+
+
+
+                                                            </tr>
+                                                            <% } %>
+                                                                <% } %>
+
+
+
+
+
+                                    </tr>
+                                     
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+</body>
+ 
+</html>

@@ -1,0 +1,188 @@
+<%- include('./partial/header') %>
+    
+    
+
+<div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+           
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Super Admin</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span> Shuttle Bus Management </span>
+<span>Shuttle Bus Owners</span>
+<span id="current">Edit Shuttle Bus Owner</span>
+
+                    </div>
+             <div>
+               <span class="exit" onclick=back()><i class="las la-long-arrow-alt-left"></i></span>
+            </div >   
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Edit Shuttle Bus Owner</h3>
+                               
+                            </div>
+                        
+                        
+ 
+                  </div>
+                <form id="form">
+                    <div class="form-row">
+ <label for="">Operator Name</label>
+                   <input id="name" value="<%=body[0].fullname%>" required type="text">
+                    </div>
+
+                     <div class="form-row">
+ <label for="">Username</label>
+                   <input id="username" value="<%=body[0].username%>" required type="text">
+                    </div>
+                               
+                  <div class="form-row">
+ <label for="">Telephone</label>
+                   <input id="telephone" value="<%=body[0].telephone%>" required type="text">
+                    </div>
+                      <div class="form-row">
+ <label for="">No of Buses</label>
+                   <input id="no_bus" value="<%=body[0].no_bus%>" required type="text">
+                    </div>
+                      <div class="form-row">
+ <label for="">Password</label>
+                   <input id="password" value=""  type="text">
+                    </div>
+                     
+               <div class="form-row">
+                 <label for="">Status Of User</label>
+                 <select id="status">
+                <option value="<%=body[0].status%>" selected disabled>
+                                                 <%if (body[0].status=="InActive" ){%>
+                                Deactivated <%}%> <% if
+                                (body[0].status=="Active" ){%> Activated <%}%>
+                              </option>
+                              <option value="InActive">Deactivate</option>
+
+                              <option value="Active">Activate</option>
+                 </select>
+               </div>     
+                 
+                        <button onclick="load(<%=body[0].userId%>) " id="submit">
+                            <span id="text">Update</span>
+                        </button>
+                   
+                </form>
+              </div>
+             
+          </div>
+            <div id="snackbar">
+      
+           </div>
+        </main>
+        
+        
+    </div>
+   
+    </div>
+      
+</body>
+
+    
+     
+ <script type="text/javascript">
+  function back() {
+        history.back(-1)
+      }
+    window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+user_role.textContent=data[0].role
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+    
+      function load(id) {
+   let snackBar=document.getElementById("snackbar")
+        let text=document.getElementById("text")
+        let btn = document.getElementById("submit");
+        let form=document.getElementById("form")
+        form.addEventListener("submit",(e)=>{
+        e.preventDefault()
+        btn.classList.add("loading")
+        btn.disabled=true
+        text.style.visibility="hidden"
+   })
+        let obj = {
+          telephone: document.getElementById("telephone"),
+          name: document.getElementById("name"),
+           password: document.getElementById("password"),
+          no_bus: document.getElementById("no_bus"),
+          username: document.getElementById("username"),
+          status: document.getElementById("status"),
+        };
+
+        let requestObj =
+          "username=" +
+          obj.username.value +
+          "&telephone=" +
+          obj.telephone.value +
+          "&password=" +
+          obj.password.value +
+          "&name=" +
+          obj.name.value +
+          "&status=" +
+          obj.status.value+
+          "&no_bus="+obj.no_bus.value;
+        let xhr = new XMLHttpRequest();
+        console.log(xhr.readyState);
+
+        xhr.onload = () => {
+
+        btn.disabled=false
+          snackBar.innerText = ` ${xhr.responseText}`
+          console.log(xhr.responseText);
+          text.style.visibility="visible"
+          snackBar.className="show"
+                btn.classList.remove("loading")
+                setTimeout(()=>{
+                    snackBar.className=snackBar.className.replace("show","")
+
+                },3000)  
+          console.log(xhr.responseText);
+        };
+
+        xhr.open("post", `/admin/business/edit/${id}`, true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(requestObj);
+      }
+    </script>
+  </body>
+</html>

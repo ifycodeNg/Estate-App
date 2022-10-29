@@ -1,0 +1,290 @@
+<%- include('./partial/header') %>
+ <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+           
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+        
+             <div class="breadcrumb">
+<span> Resident Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Add Domestic Staff</h3>
+                               
+                            </div>
+                        
+                        
+ 
+                  </div>
+                <form id="form">
+                    <div class="form-row">
+ <label for="">Fullname</label>
+                   <input id="fullname" required type="text">
+                    </div>
+                  <div class="form-row">
+ <label for="">Telephone</label>
+                   <input id="telephone" required type="tel">
+                    </div>
+                    <div class="form-row">
+                      <label for="">Address</label>
+                                        <input id="address" required type="text">
+                                         </div>
+                 
+                      <div class="form-row">
+ <label for="">State of Origin</label>
+                  <select required name="" id="location">
+                    <option selected disabled>State Of Origin</option>
+                    <option value="Abia">Abia</option>
+                    <option value="Adamawa">Adamawa</option>
+                    <option value="Akwa Ibom">Akwa Ibom</option>
+                     <option value="Anambra">Anambra</option>
+                    <option value="Bauchi">Bauchi</option>
+                    <option value="Bayelsa">Bayelsa</option>
+                     <option value="Benue">Benue</option>
+                    <option value="Borno">Borno</option>
+                    <option value="Cross River">Cross River</option>
+                     <option value="Delta">Delta</option>
+                    <option value="Ebonyi">Ebonyi</option>
+                    <option value="Edo">Edo</option>
+                     <option value="Ekiti">Ekiti</option>
+                    <option value="Enugu">Enugu</option>
+                    <option value="Gombe">Gombe</option>
+                     <option value="IMO">IMO</option>
+                    <option value="Jigawa">Jigawa</option>
+                    <option value="Kaduna">Kaduna</option>
+                     <option value="Kano">Kano</option>
+                    <option value="Kastina">Kastina</option>
+                    <option value="Kebbi">Kebbi</option>
+                     <option value="Kogi">Kogi</option>
+                    <option value="Kwara">Kwara</option>
+                    <option value="Lagos">Lagos</option>
+                     <option value="Nasarawa">Nasarawa</option>
+                    <option value="Niger">Niger</option>
+                    <option value="Ogun">Ogun</option>
+                     <option value="Ondo">Ondo</option>
+                    <option value="Osun">Osun</option>
+                    <option value="Oyo">Oyo</option>
+                     <option value="Plateau">Plateau</option>
+                    <option value="Rivers">Rivers</option>
+                    <option value="Sokoto">Sokoto</option>
+                     <option value="Taraba">Taraba</option>
+                    <option value="Yobe">Yobe</option>
+                    <option value="Zamfara">Zamfara</option>
+                    <option value="FCT">FCT</option>
+                  </select>
+                    </div>
+                    <div class="form-row">
+                        <label for="">Job Type</label>
+                        <select required name="" id="jobType">
+                        <option selected disabled>Job Schedule</option>
+                        <option>Full-Time</option>
+                        <option>Part-Time</option>
+                                                                                         </select>
+                                           </div>
+                        
+                                           <div class="form-row">
+                                            <label for="">Job Role</label>
+                                                             <select required name="" id="department">
+                                                                <option disabled selected>Job Role</option>
+                                <option value="cook">Cook</option>
+                                <option value="Cleaner">Cleaner</option>
+                                <option value="Driver">Driver</option>
+                                <option value="Nanny">Nanny</option>
+                                <option value="Security Man">Security Man</option>
+                                <option value="Baby Sitter">Baby Sitter</option>
+                                <option value="Laundry">Laundry </option>
+                                <option value="House Keeper">House Keeper</option>
+                                <option value="Others">Others</option>
+                                                             </select>
+                                                               </div>
+                                                               <div class="form-row">
+                                                                <label for="">Drive Number</label>
+                                                                                 <select onchange="clicked()"  required name="" id="driveNo">
+                                                                                      <option disabled selected value="">
+                                                                                               Select Drive No
+                                                                                           </option>
+                                                                                        <option value="1">
+                                                                                               Drive 1
+                                                                                           </option>
+                                                                                           <option value="2">
+                                                                                               Drive 2
+                                                                                           </option>
+                                                                                            <option value="3">
+                                                                                               Drive 3
+                                                                                           </option>
+                                                                                            <option value="4">
+                                                                                               Drive 4
+                                                                                           </option>
+                                                                                            <option value="5">
+                                                                                               Drive 5
+                                                                                           </option>
+                                                                                            <option value="6">
+                                                                                               Drive 6
+                                                                                           </option>
+                                                                                 </select>
+                                                                                   </div>
+                                                                                   <div class="form-row">
+                                                                                    <label for="">Employer</label>
+                                                                                                      <select  required name="" id="houseNo">
+                                                                                                       
+                                                                                                     </select>
+                                                                                                       </div>
+                                            
+                            <button onclick="load() " id="submit">
+                                 <span id="text">Add Staff</span>
+                        </button>
+               
+                </form>
+              </div>
+             
+          </div>
+                <div id="snackbar">
+      
+           </div>
+        </main>
+        
+        
+    </div>
+   
+    </div>
+      
+
+    <script>
+      window.addEventListener("load",()=>{
+    let xhr = new XMLHttpRequest();
+      let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)
+       
+user_name.textContent=data[0].fullname
+
+         };
+
+        xhr.open("get", `/api/user`, true);
+        xhr.send(); 
+         
+
+ })
+       function load() {
+        let snackBar=document.getElementById("snackbar")
+        let btn = document.getElementById("submit");
+        let form=document.getElementById("form")
+        let text=document.getElementById("text")
+        form.addEventListener("submit",(e)=>{
+          e.preventDefault()
+        btn.classList.add("loading")
+        btn.disabled=true
+        text.style.visibility="hidden"  
+   })
+     
+            let obj = {
+                fullname: document.getElementById("fullname"),
+                telephone: document.getElementById("telephone"),
+                address: document.getElementById("address"),
+                location: document.getElementById("location"),
+                jobType: document.getElementById("jobType"),
+                department: document.getElementById("department"),
+                tenId: document.getElementById("houseNo")
+           
+        };
+
+        let requestObj =
+          "fullname=" +
+          obj.fullname.value +
+          "&address=" +
+          obj.address.value +
+          "&location=" +
+          obj.location.value+
+          "&jobType=" +
+          obj.jobType.value+
+          "&department=" +
+          obj.department.value+
+          "&telephone=" +
+          obj.telephone.value+
+          "&tenId=" +
+          obj.tenId.value 
+      let xhr = new XMLHttpRequest();
+
+        xhr.onload = () => {
+          obj.fullname.value = "";
+          obj.telephone.value = "";
+          obj.location.value = "";
+          obj.address.value = "";
+          obj.department.value = "";
+          obj.jobType.value = "";
+         
+          btn.disabled=false
+          snackBar.innerText = ` ${xhr.responseText}`
+          text.style.visibility="visible"   
+          snackBar.className="show"
+                btn.classList.remove("loading")
+                setTimeout(()=>{
+                    snackBar.className=snackBar.className.replace("show","")
+
+                },3000)  
+        };
+
+        xhr.open("post", "/admin/add/staff", true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(requestObj);
+      }
+      function clicked() {
+          let select=document.getElementById("driveNo") 
+          let val= select.value 
+          let xhr = new XMLHttpRequest();
+          let requestObj="driveNo="+val;
+          xhr.onload = () => {
+              let data=JSON.parse(xhr.responseText)  
+              add_data(data)
+         };
+
+        xhr.open("get", `/residents/${val}`, true);
+        xhr.send(requestObj); 
+
+      }
+    function add_data(data){
+//       let user_name=document.getElementById("user_name")   
+// let user_role=document.getElementById("user_role")
+// user_name.textContent=data.profile[0].fullname
+// user_role.textContent=data.profile[0].role
+    let residents=document.getElementById("houseNo") 
+    residents.innerHTML='' 
+    for (let i = 0; i < data.result.length; i++) {
+      let option=document.createElement("option")
+       option.innerHTML=`<option>${data.result[i].fullname}</option>`
+       option.value=`${data.result[i].tenId}`
+       residents.append(option)
+    }
+  }
+    
+    </script>
+  </body>
+</html>

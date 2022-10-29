@@ -1,0 +1,176 @@
+
+        
+        <%- include('./partial/header') %>
+        <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+             <div class="search-wrapper">
+                <span class="las la-search">
+                 </span>
+                    <input type="search" name="" placeholder="Search By Name" id="">
+                
+            </div>
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+        
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Rejected Payments</h3>
+                               
+                               
+                            </div>
+                        
+                        
+                 
+                      
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%" id="shuttle">
+                                <thead>
+                                    <tr>
+                                     
+                                                        <tr>
+                                                        <th>S/N</th>
+                                                        <th>Operator</th>
+                                                        <th>Telephone Number</th>
+                                                        <th>Payee</th>
+                                                        <th>Amount</th>
+                                                    
+                                                        <th>Deposit Date</th>
+                                                        <th>Receipt / Teller No</th>
+                                               
+                                                        <th>Receipt Issued</th>
+                                                         
+                                                      
+                                                        <th>Action</th>
+
+                                                    </tr>
+
+                                                   
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                     
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+   
+    </div>
+ <script>
+  function load_data() {
+       let status="Rejected"
+       let role='ShuttleOwner'
+   let xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+    let data=JSON.parse(xhr.responseText)
+    console.log(data)
+    add_data(data)
+ };
+    xhr.open("get", `/admin/users/${role}/${status}`, true);
+    xhr.send();
+
+}
+load_data()
+function add_data(data){
+let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+user_name.textContent=data.user_profile[0].fullname
+
+let table=document.getElementById("shuttle")  
+
+for (let i = 0; i < data.body.length; i++) {
+ let receipt_given= data.body[i].receipt_given? "false":"true"
+ console.log(receipt_given)
+if(false){
+    console.log("Thank God")
+}
+if(JSON.parse(data.body[i].receipt_given)){
+let tr=document.createElement("tr")
+
+tr.innerHTML=
+ `<td>${i+1}</td>`+
+ `<td>`+data.body[i].username +`</td>`+
+ `<td>${data.body[i].telephone  }</td>`+
+  `<td>${data.body[i].payee} </td>`+
+ `<td>${data.body[i].amount}</td>`+
+ `<td>${data.body[i].deposit_date}</td>`+
+ `<td>${data.body[i].receipt} </td>`+
+ `<td><a href=/upload/${data.body[i].image}>View</a> </td>`+
+ `<td><input type="checkbox"  onclick="check(${i+1})" name="" id="given${i+1}"></td>`+
+
+ `<td>`+
+     `<span style="display:flex;">`+
+      `<span class="status green"></span>`+data.body[i].status +
+      `</span>`
+  +` </td>`+
+  `<td class="actions">`+
+   
+    `  <span style="cursor:pointer" class="reject reject${i+1}" onclick="func('reject',${i+1})">Reject</span>  
+          `+
+        
+   ` </td>`
+    table.append(tr) 
+ 
+}
+ 
+  
+ }
+  
+ }
+
+
+      function load(id,status) {
+   let newPost = document.getElementById("matchList");
+
+        let requestObj = "status=" + status;
+
+        let xhr = new XMLHttpRequest();
+        console.log(xhr.readyState);
+
+        xhr.onload = () => {
+        
+         newPost.innerHTML = `<h3 style=color:green; padding:5px;> ${xhr.responseText} </h3>`;;
+         
+          alert(xhr.responseText)
+        };
+
+        xhr.open("post", `/admin/confirm/deposit/${id}`, true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(requestObj);
+      }
+    </script>
+</html>

@@ -1,0 +1,182 @@
+<%- include('./partial/header') %>
+        <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+            
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name"><%=profile[0].fullname%></h4>
+                <small id="user_role">Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span>Corner Shop Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Paid And Balance </h3>
+                               
+                               
+                            </div>
+                                  <div >
+
+                                <button><a style="color:black; font-weight: bold;" href="/resident/download/paid">Export to CSV</a></button>
+                            </div>
+                        
+                        
+                 
+                      
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%">
+                                <thead>
+                                   <tr>
+                                                        <th>S/N</th>
+                                                        <th>Resident Name</th>
+                                                        <th>Telephone Number</th>
+                                                         <th>Drive No</th>
+                                                       
+                                                        <th>House No</th>
+                                                    <th>Amount Paid(2021)</th>
+                                                        
+                                                       
+                                                        <th>Bal 2012/13</th>
+                                                        <th>Bal 2014/15</th>
+                                                        <th>Bal 2016</th>
+                                                        <th>Bal 2017</th>
+                                                         <th>Bal 2018</th>
+                                                          <th>Bal 2019</th>
+                                                           <th>Bal 2020</th>
+                                                           <th>Amount Due(2021)</th>
+                                                     
+                                                           <th>2021 Bal Payment</th>
+                                                           <th>Total Bal Due</th>
+                                                           
+                                               
+                                                         <th>Status</th>
+                                                      
+                                                        
+
+                                                    </tr>
+                                </thead>
+                                <tbody>
+                                 
+                                     <% if (body){%>
+                                                        <% for (let i=0; i < body.length; i++){%>
+                                                            <tr>
+                                                                <td>
+                                                                    <%=(i +1)%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=body[i].resident%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=body[i].telephone%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=body[i].driveNo%>
+                                                                </td>
+                                                                 <td>
+                                                                    <%=body[i].houseNo%>
+                                                                </td>
+                                                                 <td>
+                                                                    <%=body[i].amount_paid%>
+                                                                </td>
+                                                                 <td>
+                                                                    <%=body[i].bal_2012_13%>
+                                                                </td>
+                                                                 <td>
+                                                                    <%=body[i].bal_2014_15%>
+                                                                </td>
+                                                                   <td>
+                                                                    <%=body[i].bal_2016%>
+                                                                </td>
+                                                                 <td>
+                                                                    <%=body[i].bal_2017%>
+                                                                </td>
+                                                                   <td>
+                                                                    <%=body[i].bal_2018%>
+                                                                </td>
+                                                                  <td>
+                                                                    <%=body[i].bal_2019%>
+                                                                </td>
+                                                                    <td>
+                                                                    <%=body[i].bal_2020%>
+                                                                </td>
+                                                                    <td>
+                                                                    <%=body[i].amount%>
+                                                                </td>
+                                                                 <td>
+                                                                    <%=body[i].total_due_bal%>
+                                                                </td>
+                                                                    <td>
+                                                                    <%=body[i].balance%>
+                                                                </td>
+
+
+
+
+
+                                                                <td>
+
+                                                                    <% if (body[i].balance>0 ){%>
+                                                                        
+                                                                         <span class="status red"></span>
+                                                                            Incomplete
+                                                                          
+                                                                      
+                                                                        <% } %>
+                                                                            <% if (body[i].balance < 0){%>
+                                                                               <span class="status green"></span>
+                                                                                   Complete
+                                                                              
+                                                                                <% } %>
+                                                                </td>
+
+
+
+                                                            </tr>
+                                                            <% } %>
+                                                                <% } %>
+
+
+
+
+
+                                    </tr>
+                                     
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+</body>
+ 
+</html>

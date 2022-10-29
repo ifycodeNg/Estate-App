@@ -1,0 +1,278 @@
+<%- include('./partial/header') %>
+             <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+            <div class="search-wrapper">
+                <span onclick=search() class="las la-search">
+                 </span>
+
+                    <input type="search" placeholder="Search By Ref No" id="search_resident">
+                
+            </div>
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+         <div class="breadcrumb">
+<span>Resident Management </span>
+<span id="current"></span>
+
+                    </div>
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Confirmed Payment</h3>
+                               
+                               
+                            </div>
+                            <div>
+  <span>Sort By Drive Number</span>
+                        <select id="selected" onchange=clicked()>
+                             <option selected disabled value="">
+                                Drive No
+                            </option>
+                            <option value="1">
+                                Drive 1
+                            </option>
+                            <option value="2">
+                                Drive 2
+                            </option>
+                             <option value="3">
+                                Drive 3
+                            </option>
+                             <option value="4">
+                                Drive 4
+                            </option>
+                             <option value="5">
+                                Drive 5
+                            </option>
+                             <option value="6">
+                                Drive 6
+                            </option>
+                        </select>
+                   </div>
+                      
+                        
+                 
+                      
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%" id="table_resident">
+                                <thead>
+                                    <tr>
+                                     
+                                                        <tr>
+                                                        <th>S/N</th>
+                                                        <th>Drive No</th>
+                                                        <th>House No</th>
+                                                
+                                                        <th>Amount</th>
+                                                    
+                                                        <th>Deposit Date</th>
+                                                        <th>Receipt / Teller No</th>
+                                                        <th>Ref No</th>
+                                                        <th>Image</th>
+                                                        <th>Receipt Issued</th>
+                                                         
+                                                      <th>Status</th>
+                                                        <th>Action</th>
+
+                                                    </tr>
+
+                                                   
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                     
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+   
+    </div>
+      
+</body>
+
+
+ <script>
+     function clicked() {
+          let select=document.getElementById("selected") 
+          let table=document.getElementById("table_resident")
+          let val= select.value 
+         let xhr = new XMLHttpRequest();
+          let requestObj="drive="+val;
+          console.log(xhr.readyState);
+          xhr.onload = () => {
+            let count=2
+            let rowCount=table.rows.length         
+              let data=JSON.parse(xhr.responseText)
+                       for(let i=count;i<rowCount;i++){
+              table.deleteRow(count)
+                    }
+              add_data(data)
+
+         };
+        xhr.open("get", `/admin/resident/payment/${val}`, true);
+        xhr.send(requestObj);
+     }
+function load_data() {
+   let xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+    let data=JSON.parse(xhr.responseText)
+    console.log(data)
+    add_data(data)
+ };
+    xhr.open("get", `/admin/payment/resident/confirmed`, true);
+    xhr.send();
+
+}
+load_data()
+function add_data(data){
+let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+user_name.textContent=data.profile[0].fullname
+
+
+let table=document.getElementById("table_resident")  
+
+for (let i = 0; i < data.results.length; i++) {
+ let receipt_given= data.results[i].receipt_given? "false":"true"
+if(JSON.parse(data.results[i].receipt_given)){
+let tr=document.createElement("tr")
+tr.innerHTML=
+ `<td>${i+1}</td>`+
+ `<td>`+data.results[i].driveNo +`</td>`+
+ `<td>${data.results[i].houseNo  }</td>`+
+ `<td>${data.results[i].amount}</td>`+
+ `<td>${data.results[i].deposit_date}</td>`+
+ `<td>${data.results[i].receipt} </td>`+
+ `<td>${data.results[i].receipt_no} </td>`+
+ `<td><a href=/upload/${data.results[i].image}>View</a> </td>`+
+ `<td><input type="checkbox" checked onclick="check(${data.results[i].id})" name="" id="given${data.results[i].id}"></td>`+
+
+ `<td>`+
+     `<span style="display:flex;">`+
+      `<span class="status green"></span>`+data.results[i].status +
+      `</span>`
+  +` </td>`+
+  `<td class="actions">`+
+   
+    `  <span style="cursor:pointer" class="Rejected reject${data.results[i].id}" onclick="func('reject',${data.results[i].id})">Reject</span>  
+           `+
+        
+   ` </td>`
+    table.append(tr) 
+ 
+}
+else {
+let tr=document.createElement("tr")
+tr.innerHTML=
+ `<td>${i+1}</td>`+
+ `<td>`+data.results[i].driveNo +`</td>`+
+ `<td>${data.results[i].houseNo  }</td>`+
+ `<td>${data.results[i].amount}</td>`+
+ `<td>${data.results[i].deposit_date}</td>`+
+ `<td>${data.results[i].receipt} </td>`+
+ `<td>${data.results[i].receipt_no} </td>`+
+ `<td><a href=/upload/${data.results[i].image}>View</a> </td>`+
+ `<td><input type="checkbox"  onclick="check(${data.results[i].id})" name="" id="given${data.results[i].id}"></td>`+
+
+ `<td>`+
+     `<span style="display:flex;">`+
+      `<span class="status green"></span>`+data.results[i].status +
+      `</span>`
+  +` </td>`+
+  `<td class="actions">`+
+   
+    `  <span style="cursor:pointer" class="Rejected reject${data.results[i].id}" onclick="func('reject',${data.results[i].id})">Reject</span>  
+          `+
+        
+   ` </td>`
+    table.append(tr) 
+ 
+}
+ 
+   
+   
+
+
+ }
+  
+ }
+function search() {
+    let input_val=document.getElementById("search_resident") 
+     input_value=input_val.value
+     if(!input_value){
+return false
+     }
+          let table=document.getElementById("table_resident") 
+         let xhr = new XMLHttpRequest();
+          let requestObj="name="+input_value;
+          console.log(xhr.readyState);
+          xhr.onload = () => {
+            let count=2
+            let rowCount=table.rows.length         
+              let data=JSON.parse(xhr.responseText)
+                       for(let i=count;i<rowCount;i++){
+              table.deleteRow(count)
+                    }
+              add_data(data)
+
+         };
+        xhr.open("get", `/resident/confirmed/search/${input_value}`, true);
+        xhr.send(requestObj);
+}
+function func(info,v_data){
+        let given=document.getElementById(`given${v_data}`)
+        let val=given.checked
+        let data= "Rejected"
+        value=val?"true":"false"
+        load(v_data,value,data)    
+  }
+function load(id,given,status) {
+         let requestObj = "status=" + status + "&given=" + given;
+
+        let xhr = new XMLHttpRequest();
+     xhr.onload = () => {
+     
+           alert(xhr.responseText)
+            window.location.reload()
+     
+        };
+
+        xhr.open("post", `/admin/status/payment/${id}`, true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(requestObj);
+      }
+    </script>
+</html>

@@ -1,0 +1,362 @@
+<%- include('./partial/header') %>
+       <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+            <div class="search-wrapper">
+                <span class="las la-search" onclick=search()>
+                 </span>
+                    <input type="search" name="" placeholder="Search Here" id="search_resident">
+                
+            </div>
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+           
+  <small id="user_role">Administrator</small>     
+                </div>
+              
+            </div>
+          
+                      
+            </header>
+            
+         
+        <main>
+ <div class="breadcrumb">
+<span> Corner Shop Management </span>
+<span id="current"></span>
+
+                    </div>
+                    
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                
+                                <button><a href="/admin/download/business">Export to Excel</a></button>
+                            </div>
+                            <h3>All Corner Shop Owners</h3>
+                         <div>
+  <span>Sort By Drive Number</span>
+                        <select name="" id="">
+                            <option value="">
+                                Drive 1
+                            </option>
+                            <option value="">
+                                Drive 2
+                            </option>
+                             <option value="">
+                                Drive 3
+                            </option>
+                             <option value="">
+                                Drive 4
+                            </option>
+                             <option value="">
+                                Drive 5
+                            </option>
+                             <option value="">
+                                Drive 6
+                            </option>
+                        </select>
+                   </div>
+                        
+                 
+                      
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%" id="business_table">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                      S/N
+                                        
+                                    </td>
+                                      <td>
+                                       Operator Name
+                                        
+                                    </td>
+                                    <td>
+                                      UId
+                                       
+                                   </td>
+                                <td>
+                                       Shop Name
+                                        
+                                    </td>
+                                    
+                            
+                                <td>
+                                        Telephone No
+                                        
+                                    </td>
+                                     <td>
+                                        No Of Shop
+                                        
+                                    </td>
+                                     <td>
+                                     Drive No
+                                        
+                                    </td>
+                                     
+                          
+                        <td>
+                                       Status
+                                        
+                                    </td>
+                                     <% if (user.is_CornerShopManager || user.is_SuperAdmin){%> 
+                                <td>
+                                    Action
+                                </td>
+                                <% } %>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                     
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+   
+   
+    
+    <script>
+ let residents_arr
+function search() {
+    let input_val=document.getElementById("search_resident") 
+     input_value=input_val.value
+     if(!input_value){
+return false
+     }
+          let table=document.getElementById("business_table") 
+         let xhr = new XMLHttpRequest();
+          let requestObj="name="+input_value;
+          console.log(xhr.readyState);
+          xhr.onload = () => {
+            let count=0
+            let rowCount=table.rows.length         
+              let data=JSON.parse(xhr.responseText)
+                       for(let i=count;i<rowCount;i++){
+              table.deleteRow(count)
+                    }
+              add_data(data)
+
+         };
+        xhr.open("get", `/business/search/${input_value}`, true);
+        xhr.send(requestObj);
+}
+
+var currentFocus;
+function autocomplete(inp, arr) {
+  /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+  
+  /*execute a function when someone writes in the text field:*/
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      /*append the DIV element as a child of the autocomplete container:*/
+      this.parentNode.appendChild(a);
+      /*for each item in the array...*/
+      for (i = 0; i < arr.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].fullname.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].fullname.substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].fullname.substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i].fullname + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+              b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  /*execute a function presses a key on the keyboard:*/
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      
+      if (x) x = x.getElementsByTagName("div");
+      console.log(x)
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    console.log(x)
+    console.log(currentFocus)
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+      x[i].parentNode.removeChild(x[i]);
+    }
+  }
+}
+}
+/*execute a function when someone clicks in the document:*/
+document.addEventListener("click", function (e) {
+    closeAllLists(e.target);
+});
+
+let input_search=document.getElementById("search_resident")
+input_search.addEventListener("input",()=>{
+ autocomplete(document.getElementById("search_resident"), residents_arr);
+})
+function load_data() {
+     let xhr = new XMLHttpRequest();
+        console.log(xhr.readyState);
+
+        xhr.onload = () => {
+    
+            let data=JSON.parse(xhr.responseText)
+            console.log(data)
+            add_data(data)
+            residents_arr=data.result
+ };
+
+        xhr.open("get", `/admin/list/business`, true);
+        xhr.send();
+      }
+load_data()
+function add_data(data){
+let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+user_name.textContent=data.profile[0].fullname
+
+let table=document.getElementById("business_table")  
+for (let i = 0; i < data.result.length; i++) {
+let tr=document.createElement("tr")
+if(data.result[i].status=="Active"){
+ tr.innerHTML=
+ `<td>${i+1}</td>`+
+
+ `<td>`+data.result[i].fullname +`</td>`+
+ `<td>${data.result[i].unique_id} </td>`+
+  `<td>${data.result[i].shop_name} </td>`+
+ `<td>${data.result[i].telephone  }</td>`+
+  `<td>${data.result[i].no_shop  }</td>`+
+ `<td>${data.result[i].driveNo} </td>`+
+ `<td>`+
+      `<span class="status green"></span>`+ data.result[i].status
+  +` </td>`
+   +
+  `<td class="btn_resident">`+
+  <% if (user.is_SuperAdmin){%> 
+    ` <button><a href="/admin/business/delete/${data.result[i].userId}"><span>
+             Delete
+               </span></a></button>`+
+    <% } %>
+             <% if (user.is_CornerShopManager || user.is_SuperAdmin){%>                                       
+              ` <button><a href="/admin/business/update/${data.result[i].userId}"><span>
+               Edit
+          </span></a></button>`+
+   ` </td>`
+      <% } %>
+    table.append(tr) 
+}
+else{
+tr.innerHTML=
+ `<td>${i+1}</td>`+
+ `<td>`+data.result[i].fullname +`</td>`+
+ `<td>${data.result[i].unique_id} </td>`+
+ `<td>${data.result[i].shop_name} </td>`+
+  `<td>${data.result[i].telephone} </td>`+
+   `<td>${data.result[i].no_shop  }</td>`+
+ `<td>${data.result[i].driveNo} </td>`+
+ `<td>`+
+      `<span class="status red"></span>`+ data.result[i].status
+  +` </td>`+
+  `<td class="btn_resident">`+
+   <% if (user.is_SuperAdmin){%> 
+    ` <button><a href="/admin/business/delete/${data.result[i].userId}"><span>
+             Delete
+               </span></a></button>`+
+ <% } %>
+              <% if (user.is_CornerShopManager || user.is_SuperAdmin){%>             
+              ` <button><a href="/admin/business/update/${data.result[i].userId}"><span>
+               Edit
+          </span></a></button>`+
+   ` </td>`
+         <% } %>
+    table.append(tr) 
+
+}
+
+ 
+ }
+  
+ }
+ 
+ 
+    </script>
+ 
+  </body>
+</html>

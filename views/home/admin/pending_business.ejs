@@ -1,0 +1,213 @@
+<%- include('./partial/header'); %>
+        
+     <div class="main-content">
+            <header>
+                   <h2> 
+                    <label for="nav-toggle">
+                        <span class="las la-bars">
+                    </span></label>
+              Dashboard
+            </h2>
+            <div class="search-wrapper">
+                <span class="las la-search">
+                 </span>
+                    <input type="search" name="" placeholder="Search Here" id="">
+                
+            </div>
+            <div class="user-wrapper">
+                <img src="/img/avatar.svg" height="50" width="50" alt="">
+                <div>
+
+  <h4 id="user_name">John Doe</h4>
+                <small id="user_role"> Administrator</small>
+                </div>
+              
+            </div>
+        
+            </header>
+         
+        <main>
+             <div class="breadcrumb">
+<span>Corner Shop Management </span>
+<span id="current"></span>
+
+                    </div>
+        
+
+            
+          <div class="recent-grid">
+              <div class="projects">
+                  <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Pending Payments</h3>
+                               
+                               
+                            </div>
+                        
+                        
+                 
+                      
+                                            </div>
+                        <div class="card-body">
+                        <table width="100%" id="table_resident">
+                                <thead>
+                                    <tr>
+                                     
+                                                        <th>S/N</th>
+                                                        <th>Corner Shop Owner</th>
+                                                        <th>Telephone Number</th>
+                                                        <th>Payee</th>
+                                                        <th>Amount</th>
+                                                        <th>Image</th>
+                                                       <th>Receipt Issued</th>
+                                                        <th>Deposit Date</th>
+                                                        <th>Receipt / Teller No</th>
+                                                         <th>Status</th>
+                                                      
+                                                        <th>Action</th>
+
+                                                   
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                  
+                                </tbody>
+                        </table>
+                    </div>
+                  </div>
+                   
+              </div>
+             
+          </div>
+           
+        </main>
+        
+        
+    </div>
+
+
+<script type="text/javascript">
+let value
+var pos=true     
+function check(data) {
+    
+if(pos){
+    
+    if(document.querySelector(`.reject${data}`).style.display="block"){
+    document.querySelector(`.reject${data}`);
+    document.querySelector(`.reject${data}`).style.display="none"
+    pos= false
+    console.log("none")
+    }
+    else if(document.querySelector(`.reject${data}`).style.display="none"){
+    document.querySelector(`.reject${data}`);
+    document.querySelector(`.reject${data}`).style.display="none"
+    console.log("none")
+    pos=true 
+    }
+
+}
+else if(!pos){
+     if(document.querySelector(`.reject${data}`).style.display="none"){
+    document.querySelector(`.reject${data}`);
+    document.querySelector(`.reject${data}`).style.display="block"
+     pos=true 
+    console.log("block")
+}
+else if(document.querySelector(`.reject${data}`).style.display="block"){
+    document.querySelector(`.reject${data}`);
+    document.querySelector(`.reject${data}`).style.display="block"
+pos=false
+}
+    
+      }
+    }
+function func(info,v_data){
+        let given=document.getElementById(`given${v_data}`)
+        let val=given.checked
+        let data=info=="reject" ? "reject":"Confirmed"
+        console.log(data)
+        value=val?"true":"false"
+       console.log(value) 
+            load(v_data,value,data)
+   
+         
+  }
+
+function load_data() {
+    let role="BusinessOwner"
+   let xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+    let data=JSON.parse(xhr.responseText)
+    console.log(data)
+    add_data(data)
+ };
+    xhr.open("get", `/admin/user/deposit/${role}`, true);
+    xhr.send();
+
+}
+load_data()
+function add_data(data){
+let user_name=document.getElementById("user_name")   
+let user_role=document.getElementById("user_role")
+user_name.textContent=data.user_profile[0].fullname
+
+let table=document.getElementById("table_resident")  
+for (let i = 0; i <data.body.length; i++) {
+let tr=document.createElement("tr")
+
+ tr.innerHTML=
+ `<td>${i+1}</td>`+
+ `<td>`+ data.body[i].fullname +`</td>`+
+ `<td>${data.body[i].telephone  }</td>`+
+  `<td>${data.body[i].payee} </td>`+
+ `<td>${data.body[i].amount}</td>`+
+ `<td><a href=/upload/${data.body[i].image}>View</a> </td>`+
+ `<td><input type="checkbox" onclick="check(${data.body[i].id})" name="" id="given${data.body[i].id}"></td>`+
+`<td>${data.body[i].deposit_date} </td>`+
+`<td>${data.body[i].receipt} </td>`+
+ `<td>`+
+     `<span style="display:flex;">`+
+      `<span class="status red"></span>`+ data.body[i].status +
+      `</span>`
+  +` </td>`+
+  `<td class="actions">`+
+   
+    `  <span style="cursor:pointer" class="Rejected reject${data.body[i].id}" onclick="func('reject',${data.body[i].id})">Reject</span>  
+        <span style="cursor:pointer" class="confirmed confirmed${data.body[i].id}" onclick="func('Confirmed',${data.body[i].id})">Validate</span>   `+
+        
+   ` </td>`
+ 
+   
+    table.append(tr) 
+
+
+ }
+  
+ }
+
+</script>
+ <script>
+ function load(id,given,status) {
+        let requestObj = "status=" + status + "&given=" + given
+
+        let xhr = new XMLHttpRequest();
+        console.log(xhr.readyState);
+
+        xhr.onload = () => {
+        alert(xhr.responseText)
+        window.location.reload()
+        };
+
+        xhr.open("post", `/admin/user/confirm/deposit/${id}`, true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(requestObj);
+      }
+    </script>
+    
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/tailwind.css" />
+    <style>
+     .loading .text{
+     visibility: hidden;
+     opacity: 0;
+ }
+.loading::after{
+    content: "";
+   
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    
+     top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 5px solid transparent;
+    border-top-color:#fff ;
+    border-radius: 50%;
+    animation: button-loading 1s linear infinite;
+
+}
+@keyframes button-loading {
+    from {
+        transform: rotate(0turn);
+    }
+    to{
+        transform: rotate(1turn);
+    }
+}
+
+    </style>
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+body {
+    margin: 0 0 55px 0;
+}
+
+.nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 55px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+    display: flex;
+    overflow-x: auto;
+}
+
+.nav__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    min-width: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: sans-serif;
+    font-size: 13px;
+    color: #444444;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.1s ease-in-out;
+}
+
+.nav__link:hover {
+    background-color: #eeeeee;
+}
+
+.nav__link--active {
+    color: #009578;
+}
+
+.nav__icon {
+    font-size: 18px;
+}
+
+
+</style>
+        <script>
+  window.addEventListener("load",()=>{
+  
+    let path=window.location.href
+    let links=document.querySelectorAll("nav a")
+    let links_li=document.querySelectorAll("li")
+    let add=window.location.hostname
+    for(i=0;i<links.length;i++){
+      if(path==links[i].href){
+        console.log(links)
+links[i].classList +=" nav__link--active"
+        }
+      }
+    }
+  )
+ 
+</script>
+  </head>
+  <header class="h-16 flex items-center border-b border-grey-300">
+      <aside class="px-4 w-32 flex items-center justify-center">
+        <h1 class="font-bold text-lg">P.P.E.M.A</h1>
+      </aside>
+
+     
+   
+    </header>
+ <nav class="nav">
+  <a href="/resident/dashboard" class="nav__link">
+    <i class="material-icons nav__icon">dashboard</i>
+    <span class="nav__text font-body">Dashboard</span>
+  </a>
+  <a href="/resident/occupants" class="nav__link ">
+    <i class="material-icons nav__icon">group</i>
+    <span class="nav__text">Occupants</span>
+  </a>
+  <a href="/resident/view/deposit" class="nav__link">
+    <i class="material-icons nav__icon">analytics</i>
+    <span class="nav__text font-body">Payments</span>
+  </a>
+  
+  <a href="/resident/dashboard/view/domestic" class="nav__link">
+    <i class="material-icons nav__icon">people_alt</i>
+    <span class="nav__text font-body">Staffs</span>
+  </a>
+  <a href="/resident/logout" class="nav__link">
+    <i class="material-icons nav__icon">login</i>
+    <span class="nav__text font-body">logout</span>
+  </a>
+ 
+</nav>
+    <main class="lg:mb-8 lg:px-8 sm:px-0">
+      <body class="p-2 font-body">
+        
